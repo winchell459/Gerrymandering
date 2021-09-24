@@ -13,10 +13,15 @@ public class Gerrymandering : MonoBehaviour
         StartJob();
     }
 
+    bool SolverDone = false;
     // Update is called once per frame
     void Update()
     {
-        
+        if(!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
+        {
+            FindObjectOfType<Map>().DisplayMap(Solver.answerSet);
+            SolverDone = true;
+        }
     }
 
     void StartJob()
