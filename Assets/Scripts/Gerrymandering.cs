@@ -7,6 +7,10 @@ public class Gerrymandering : MonoBehaviour
 {
     public Clingo.ClingoSolver Solver;
 
+    [SerializeField] private int width = 10, height = 10, districts = 5, threads = 4;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +32,6 @@ public class Gerrymandering : MonoBehaviour
     {
         string aspCode = GerrymanderingASP.GetASP();
         string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-        Solver.Solve(filename);
+        Solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_district={districts} --parallel-mode {threads}");
     }
 }

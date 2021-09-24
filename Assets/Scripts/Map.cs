@@ -24,8 +24,8 @@ public class Map : MonoBehaviour
 
         foreach(List<string> island in answerset["island"])
         {
-            int x = int.Parse(island[1]);
-            int y = int.Parse(island[2]);
+            int x = int.Parse(island[1]) - 1;
+            int y = int.Parse(island[2]) - 1;
             Color type = Color.white;
 
             switch (island[0])
@@ -54,6 +54,28 @@ public class Map : MonoBehaviour
             pixel.SetPixel(x * PixelSpacing, y * PixelSpacing, type);
             pixel.AddNote(island);
         }
-        
+        AdjustCamera();
+    }
+
+    void AdjustCamera()
+    {
+        Camera cam = Camera.main;
+        float aspect = cam.aspect;
+        float size = cam.orthographicSize;
+
+        float boardSizeHeight = height * PixelSpacing / 2 + (PixelSpacing - 1) / 2;
+        float boardSizeWidth = width * PixelSpacing / 2 + (PixelSpacing - 1) / 2;
+
+        float boardAspect = boardSizeWidth / boardSizeHeight;
+
+        float boardSizeX = boardSizeWidth / aspect;
+        float boardSize = aspect < boardAspect ? boardSizeX : boardSizeHeight;
+
+        cam.orthographicSize = boardSize;
+
+        float y = height / 2 - (PixelSpacing - 1) / 2;
+        float x = width / 2 - (PixelSpacing - 1) / 2;
+
+        cam.transform.position = new Vector3(x, y, cam.transform.position.z);
     }
 }
