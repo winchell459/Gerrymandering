@@ -236,10 +236,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Solver: {fileID: 1589100434}
-  width: 16
-  height: 9
+  width: 20
+  height: 20
   districts: 5
-  threads: 4
+  threads: 8
 --- !u!4 &476432525
 Transform:
   m_ObjectHideFlags: 0

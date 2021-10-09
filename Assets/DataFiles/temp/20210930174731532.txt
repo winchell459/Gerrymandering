@@ -1,15 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public static class GerrymanderingASP
-{
-   public static string GetASP()
-   {
-        return areaSetup + districts + borderRules + population /*+ neighbours*/;
-   }
-
-   private static string areaSetup = @"
 
         #const max_width = 10.
         #const max_height = 10.
@@ -25,9 +14,7 @@ public static class GerrymanderingASP
   
         1{tile(XX,YY, Type): tile_type(Type)}1 :- width(XX), height(YY).
 
-     ";
-
-    private static string districts = @"
+     
     %% Create districts
         %1{district(XX,YY, Type): district_types(Type)}1 :- tile(XX,YY,_).
 
@@ -69,9 +56,7 @@ public static class GerrymanderingASP
 
         %two neighboring tiles with same district but are on differnt islands is incorrect
         :- island(Type, XX, YY), island(Type2, XX+I, YY+J), district(XX,YY, District), district(XX+I,YY+J, District), Type != Type2, combo(I), combo(J).
-    ";
-
-    private static string borderRules = @"
+    
     %% shape and border control  
     
         %:- Count = {district(_,_,Type)}, district_types(Type), Count == 0.
@@ -87,34 +72,7 @@ public static class GerrymanderingASP
                                   district(XX,YY,District).
         spikey_count(District, Count) :- Count = {spikey(XX,YY,District)}, district_types(District).
         :- spikey_count(District, Count), district_types(District), Count > 1.
-    ";
-
-    private static string population = @"
-    %% population and regions
-        1{population(XX, YY, Population): population(Population)}1 :- tile(XX, YY, _).
     
-        region(XX,YY,rural) :- tile(XX,YY,_),  population(XX,YY,Population), Population < 101.
-        region(XX,YY,city) :- tile(XX,YY,_),  population(XX,YY,Population), Population > 100.
-
-        %population(XX,YY,Population, District) :- population(XX,YY,Population), district(XX,YY,District).
-        %district_pop(District, Pop) :- Pop = #sum{Count, XX,YY : population(XX,YY,Count,District)}, district_types(District).
-    
-        %district_pop(District, Pop) :- Pop = #sum{Count, XX, YY : population(XX,YY,Count), district(XX,YY,District)}, district_types(District).
-        %:- district_pop(D1, P1), district_pop(D2, P2), P1 > P2 + 1000.
-
-        district_pop(District, Area) :- Area = {district(XX,YY,District)}, district_types(District).
-        %:- district_pop(District, Area), Area == 1.
-        :- district_pop(D1, A1), district_pop(D2, A2), A1 > A2 + 10.
-
-        %district_pop(District, Rural, City) :- 
-        %    Rural = {district(XX,YY,District): region(XX,YY,rural)}, 
-        %    City = {district(XX,YY,District): region(XX,YY,city)},
-        %    district_types(District).
-        %:- district_pop(D1, R1, C1), district_pop(D2, R2, C2), R1 + C1*100 > R2 + C2*100 + 100.
-
-    ";
-
-    private static string neighbours = @"
     %% neighbors
         neighbour(District, up, Neighbour) :- district(XX,YY,District), district(XX, YY+1, Neighbour), District != Neighbour.
         neighbour(District, down, Neighbour) :- district(XX,YY,District), district(XX, YY-1, Neighbour), District != Neighbour.
@@ -131,5 +89,4 @@ public static class GerrymanderingASP
         :- neighbour(District, Neighbours), Neighbours > 2.
 
         %#show district_pop/2.
-    ";
-}
+    
