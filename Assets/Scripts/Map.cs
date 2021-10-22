@@ -9,90 +9,35 @@ public class Map : MonoBehaviour
     private int width, height;
     public float PixelSpacing = 1.1f;
 
-    public void DisplayMap(Dictionary<string, List<List<string>>> answerset)
+    public void DisplayMap(Dictionary<string, List<List<string>>> answerset, MapKey mapKey)
     {
-        foreach(List<string> widths in answerset["width"])
+        DisplayMap(answerset, mapKey.widthKey, mapKey.heightKey, mapKey.pixelKey, mapKey.xIndex, mapKey.yIndex, mapKey.pixelTypeIndex, mapKey.colorDict);
+    }
+    public void DisplayMap(Dictionary<string, List<List<string>>> answerset, string widthKey, string heightKey, string pixelKey, int xIndex, int yIndex, int pixelTypeIndex, MapColorKey colorDict)
+    {
+        foreach (List<string> widths in answerset[widthKey])
         {
             if (int.Parse(widths[0]) > width) width = int.Parse(widths[0]);
         }
-        foreach (List<string> h in answerset["height"])
+        foreach (List<string> h in answerset[heightKey])
         {
             if (int.Parse(h[0]) > height) height = int.Parse(h[0]);
         }
 
         map = new MapPixel[width, height];
 
-        foreach (List<string> island in answerset["block"])
+        foreach (List<string> pixelASP in answerset[pixelKey])
         {
-            int x = int.Parse(island[0]) - 1;
-            int y = int.Parse(island[2]) - 1;
-            Color type = Color.white;
+            int x = int.Parse(pixelASP[xIndex]) - 1;
+            int y = int.Parse(pixelASP[yIndex]) - 1;
 
-            switch (island[3])
-            {
-                case "resource":
-                    type = Color.magenta;
-                    break;
-                case "grass":
-                    type = Color.green;
-                    break;
-                case "water":
-                    type = Color.blue;
-                    break;
-                case "sand":
-                    type = new Color(255 / 255f, 165 / 255f, 0);
-                    break;
-                case "tree":
-                    type = Color.red;
-                    break;
-                case "food":
-                    type = Color.yellow;
-                    break;
-                default:
-
-                    break;
-            }
+            string pixelType = pixelASP[pixelTypeIndex];
 
             MapPixel pixel = Instantiate(PixelPrefab, transform).GetComponent<MapPixel>();
-            pixel.SetPixel(x * PixelSpacing, y * PixelSpacing, type);
-            pixel.AddNote(island);
+            pixel.SetPixel(x * PixelSpacing, y * PixelSpacing, colorDict[pixelType]);
+            pixel.AddNote(pixelASP);
         }
-
-        //foreach(List<string> island in answerset["island"])
-        //{
-        //    int x = int.Parse(island[1]) - 1;
-        //    int y = int.Parse(island[2]) - 1;
-        //    Color type = Color.white;
-
-        //    switch (island[0])
-        //    {
-        //        case "purple":
-        //            type = Color.magenta;
-        //            break;
-        //        case "green":
-        //            type = Color.green;
-        //            break;
-        //        case "blue":
-        //            type = Color.blue;
-        //            break;
-        //        case "orange":
-        //            type = new Color(255 / 255f, 165 / 255f, 0);
-        //            break;
-        //        case "red":
-        //            type = Color.red;
-        //            break;
-        //        default:
-
-        //            break;
-        //    }
-
-        //    MapPixel pixel = Instantiate(PixelPrefab, transform).GetComponent<MapPixel>();
-        //    pixel.SetPixel(x * PixelSpacing, y * PixelSpacing, type);
-        //    pixel.AddNote(island);
-        //}
-        //AdjustCamera();
     }
-    //DisplayMap() END
 
     void AdjustCamera()
     {
@@ -120,3 +65,52 @@ public class Map : MonoBehaviour
         cam.transform.position = new Vector3(x, y, cam.transform.position.z);
     }
 }
+
+[System.Serializable]
+public class MapKey
+{
+    public string widthKey = "width";
+    public string heightKey = "height";
+    public string pixelKey = "block";
+    public int xIndex = 0;
+    public int yIndex = 2;
+    public int pixelTypeIndex = 3;
+
+    public MapColorKey colorDict;
+
+}
+[System.Serializable]
+public class MapColorKey
+{
+    public MapColor[] mapColors;
+    public Dictionary<string, Color> colorDict = new Dictionary<string, Color>() {
+        { "resource", Color.magenta },
+        { "grass", Color.green },
+        { "water", Color.blue },
+        { "sand", new Color(255 / 255f, 165 / 255f, 0) },
+        { "tree", Color.red },
+        { "food", Color.yellow }
+    };
+
+    public Color this[string key]
+    {
+        get => FindColor(key);
+    }
+    Color FindColor(string key)
+    {
+        Color color = Color.white;
+        foreach(MapColor mapColor in mapColors)
+        {
+            if (key == mapColor.key) color = mapColor.color;
+        }
+        return color;
+    }
+}
+
+[System.Serializable]
+public class MapColor
+{
+    public string key;
+    public Color color = Color.white;
+}
+
