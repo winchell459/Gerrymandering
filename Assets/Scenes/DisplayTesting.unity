@@ -270,11 +270,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Solver: {fileID: 1589100434}
   minWidth: 1
-  maxWidth: 10
+  maxWidth: 5
   minHeight: 1
   maxHeight: 10
   minDepth: 1
-  maxDepth: 10
+  maxDepth: 15
   threads: 4
   mapKey: {fileID: 11400000, guid: 7999370eee56f214c89c94f1d1ce974f, type: 2}
 --- !u!1 &973881505
@@ -479,7 +479,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1879823292}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d10d6c29a71b3ff4ba5638afaec1838f, type: 3}
+  m_Script: {fileID: 11500000, guid: c2f3064d832c3024bb0735d3f12501ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PixelPrefab: {fileID: 6955393450628161950, guid: 24234f50ca202be488f0d155910ff2f8, type: 3}

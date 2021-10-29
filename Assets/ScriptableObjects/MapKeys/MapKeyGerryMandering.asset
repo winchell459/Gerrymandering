@@ -19,38 +19,14 @@ MonoBehaviour:
   yIndex: 2
   pixelTypeIndex: 0
   colorDict:
-    mapColors:
-    - key: green
-      color: {r: 0, g: 1, b: 0, a: 1}
-    - key: blue
-      color: {r: 0, g: 0, b: 1, a: 1}
-    - key: red
-      color: {r: 1, g: 0, b: 0, a: 1}
-    - key: orange
-      color: {r: 1, g: 0.5, b: 0, a: 1}
+    mapObjects:
     - key: purple
-      color: {r: 1, g: 0, b: 1, a: 1}
-  objectDict:
-    mapObjects:
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-  spriteDict:
-    mapObjects:
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
-    - key: 
-      obj: {fileID: 0}
+      value: {r: 1, g: 0, b: 1, a: 1}
+    - key: green
+      value: {r: 0, g: 1, b: 0, a: 1}
+    - key: red
+      value: {r: 1, g: 0, b: 0, a: 1}
+    - key: blue
+      value: {r: 0, g: 0, b: 1, a: 1}
+    - key: orange
+      value: {r: 1, g: 0.5, b: 0, a: 1}

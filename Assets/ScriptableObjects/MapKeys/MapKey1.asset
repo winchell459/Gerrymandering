@@ -13,26 +13,22 @@ MonoBehaviour:
   m_Name: MapKey1
   m_EditorClassIdentifier: 
   widthKey: width
-  heightKey: height
+  heightKey: depth
   pixelKey: block
   xIndex: 0
   yIndex: 2
   pixelTypeIndex: 3
   colorDict:
-    mapColors:
+    mapObjects:
     - key: resource
-      color: {r: 1, g: 0, b: 1, a: 1}
-    - key: grass
-      color: {r: 0, g: 1, b: 0, a: 1}
+      value: {r: 1, g: 0, b: 1, a: 1}
     - key: water
-      color: {r: 0, g: 0, b: 1, a: 1}
+      value: {r: 0, g: 0, b: 1, a: 1}
+    - key: grass
+      value: {r: 0, g: 1, b: 0, a: 1}
     - key: sand
-      color: {r: 1, g: 0.5, b: 0, a: 1}
+      value: {r: 1, g: 0.5, b: 0, a: 1}
     - key: tree
-      color: {r: 1, g: 0, b: 0, a: 1}
+      value: {r: 1, g: 0, b: 0, a: 1}
     - key: food
-      color: {r: 1, g: 1, b: 0, a: 1}
-  objectDict:
-    mapObjects: []
-  spriteDict:
-    mapObjects: []
+      value: {r: 1, g: 1, b: 0, a: 1}
