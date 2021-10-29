@@ -231,7 +231,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476432523}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da62655160cc0fd4197793872442bee6, type: 3}
   m_Name: 
@@ -241,25 +241,7 @@ MonoBehaviour:
   height: 10
   districts: 5
   threads: 8
-  mapKey:
-    widthKey: width
-    heightKey: height
-    pixelKey: island
-    xIndex: 1
-    yIndex: 2
-    pixelTypeIndex: 0
-    colorDict:
-      mapColors:
-      - key: orange
-        color: {r: 1, g: 0.5, b: 0, a: 1}
-      - key: red
-        color: {r: 1, g: 0, b: 0, a: 1}
-      - key: purple
-        color: {r: 1, g: 0, b: 1, a: 1}
-      - key: green
-        color: {r: 0, g: 1, b: 0, a: 1}
-      - key: blue
-        color: {r: 0, g: 0, b: 1, a: 1}
+  mapKey: {fileID: 11400000, guid: b12a86bbbe02e404ba8593a35e9d33e4, type: 2}
 --- !u!4 &476432525
 Transform:
   m_ObjectHideFlags: 0
@@ -281,7 +263,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476432523}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: accc86aef0bdec94a9f13f9ac445cae4, type: 3}
   m_Name: 
@@ -294,27 +276,7 @@ MonoBehaviour:
   minDepth: 1
   maxDepth: 10
   threads: 4
-  mapKey:
-    widthKey: width
-    heightKey: height
-    pixelKey: block
-    xIndex: 0
-    yIndex: 2
-    pixelTypeIndex: 3
-    colorDict:
-      mapColors:
-      - key: resource
-        color: {r: 1, g: 0, b: 1, a: 1}
-      - key: grass
-        color: {r: 0, g: 1, b: 0, a: 1}
-      - key: water
-        color: {r: 0, g: 0, b: 1, a: 1}
-      - key: sand
-        color: {r: 1, g: 0.50728744, b: 0, a: 1}
-      - key: tree
-        color: {r: 1, g: 0, b: 0, a: 1}
-      - key: food
-        color: {r: 1, g: 1, b: 0, a: 1}
+  mapKey: {fileID: 11400000, guid: 7999370eee56f214c89c94f1d1ce974f, type: 2}
 --- !u!1 &973881505
 GameObject:
   m_ObjectHideFlags: 0

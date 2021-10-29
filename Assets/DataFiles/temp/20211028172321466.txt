@@ -1,50 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class ASPTest : MonoBehaviour
-{
-    public Clingo.ClingoSolver Solver;
-
-    [SerializeField] private int minWidth = 1, maxWidth = 10, minHeight = 1,  maxHeight = 10, minDepth = 1, maxDepth = 10, threads = 4;
-
-    //Dictionary<string, Color> colorDict = new Dictionary<string, Color>() {
-    //    { "resource", Color.magenta },
-    //    { "grass", Color.green },
-    //    { "water", Color.blue },
-    //    { "sand", new Color(255 / 255f, 165 / 255f, 0) },
-    //    { "tree", Color.red },
-    //    { "food", Color.yellow }
-    //};
-
-    public MapKey mapKey;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartJob();
-    }
-
-    bool SolverDone = false;
-    // Update is called once per frame
-    void Update()
-    {
-        if (!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
-        {
-            //FindObjectOfType<Map>().DisplayMap(Solver.answerSet,"width","height","block",0,2,3,colorDict);
-            FindObjectOfType<Map>().DisplayMap(Solver.answerSet, mapKey);
-            SolverDone = true;
-        }
-    }
-
-    void StartJob()
-    {
-        
-        string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-        Solver.Solve(filename, $"-c min_width={minWidth} -c max_width={maxWidth} -c min_height={minHeight} -c max_height={maxHeight} -c min_depth={minDepth} -c max_depth={maxDepth} --parallel-mode {threads}");
-    }
-
-    string aspCode = @"
             
             #const min_width = 1.
             #const min_depth = 1.
@@ -152,5 +106,4 @@ public class ASPTest : MonoBehaviour
             :- block(XX,Y1,ZZ,water), block(XX+1,Y2,ZZ-1,grass).
             :- block(XX,Y1,ZZ,water), block(XX+1,Y2,ZZ+1,grass).
 
-        ";
-}
+        

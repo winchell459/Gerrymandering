@@ -66,51 +66,5 @@ public class Map : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public class MapKey
-{
-    public string widthKey = "width";
-    public string heightKey = "height";
-    public string pixelKey = "block";
-    public int xIndex = 0;
-    public int yIndex = 2;
-    public int pixelTypeIndex = 3;
 
-    public MapColorKey colorDict;
-
-}
-[System.Serializable]
-public class MapColorKey
-{
-    public MapColor[] mapColors;
-    public Dictionary<string, Color> colorDict = new Dictionary<string, Color>() {
-        { "resource", Color.magenta },
-        { "grass", Color.green },
-        { "water", Color.blue },
-        { "sand", new Color(255 / 255f, 165 / 255f, 0) },
-        { "tree", Color.red },
-        { "food", Color.yellow }
-    };
-
-    public Color this[string key]
-    {
-        get => FindColor(key);
-    }
-    Color FindColor(string key)
-    {
-        Color color = Color.white;
-        foreach(MapColor mapColor in mapColors)
-        {
-            if (key == mapColor.key) color = mapColor.color;
-        }
-        return color;
-    }
-}
-
-[System.Serializable]
-public class MapColor
-{
-    public string key;
-    public Color color = Color.white;
-}
 
