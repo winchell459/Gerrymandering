@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 476432525}
   - component: {fileID: 476432524}
   - component: {fileID: 476432526}
+  - component: {fileID: 476432527}
   m_Layer: 0
   m_Name: Gerrymandering
   m_TagString: Untagged
@@ -231,7 +232,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476432523}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da62655160cc0fd4197793872442bee6, type: 3}
   m_Name: 
@@ -277,6 +278,27 @@ MonoBehaviour:
   maxDepth: 10
   threads: 4
   mapKey: {fileID: 11400000, guid: 7999370eee56f214c89c94f1d1ce974f, type: 2}
+--- !u!114 &476432527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476432523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d27f350a958d1e42bf7875970c84145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Solver: {fileID: 1589100434}
+  width: 10
+  height: 10
+  max_moves: 10
+  min_moves: 9
+  max_jumps: 3
+  min_jumps: 2
+  threads: 4
+  mapKey: {fileID: 11400000, guid: d808401932fb2d243a3d8c6137f3cf58, type: 2}
 --- !u!1 &973881505
 GameObject:
   m_ObjectHideFlags: 0

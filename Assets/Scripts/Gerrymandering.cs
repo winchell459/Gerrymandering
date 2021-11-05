@@ -24,6 +24,7 @@ public class Gerrymandering : MonoBehaviour
         if(!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
             FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
+            FindObjectOfType<Map.Map>().AdjustCamera();
             SolverDone = true;
         }
     }

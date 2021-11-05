@@ -14,8 +14,8 @@ namespace Map
         public int yIndex = 2;
         public int pixelTypeIndex = 3;
 
-        
 
+        //public abstract MapObjectKey<T> GetMapKeyDict<T>();
         
 
     }
