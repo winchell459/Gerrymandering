@@ -17,7 +17,7 @@ public class ASPTest : MonoBehaviour
     //    { "food", Color.yellow }
     //};
 
-    public MapKey mapKey;
+    public Map.MapKey mapKey;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +32,7 @@ public class ASPTest : MonoBehaviour
         if (!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
             //FindObjectOfType<Map>().DisplayMap(Solver.answerSet,"width","height","block",0,2,3,colorDict);
-            FindObjectOfType<Map>().DisplayMap(Solver.answerSet, mapKey);
+            FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
             SolverDone = true;
         }
     }

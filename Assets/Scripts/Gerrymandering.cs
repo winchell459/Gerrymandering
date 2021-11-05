@@ -9,7 +9,7 @@ public class Gerrymandering : MonoBehaviour
 
     [SerializeField] private int width = 10, height = 10, districts = 5, threads = 4;
 
-    public MapKey mapKey;
+    public Map.MapKey mapKey;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +23,7 @@ public class Gerrymandering : MonoBehaviour
     {
         if(!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
-            FindObjectOfType<Map>().DisplayMap(Solver.answerSet, mapKey);
+            FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
             SolverDone = true;
         }
     }
