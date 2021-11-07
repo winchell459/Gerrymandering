@@ -293,12 +293,14 @@ MonoBehaviour:
   Solver: {fileID: 1589100434}
   width: 10
   height: 10
-  max_moves: 10
-  min_moves: 9
+  max_moves: 9
+  min_moves: 8
   max_jumps: 3
   min_jumps: 2
   threads: 4
   mapKey: {fileID: 11400000, guid: d808401932fb2d243a3d8c6137f3cf58, type: 2}
+  SolverDone: 0
+  buildCount: 100
 --- !u!1 &973881505
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +507,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PixelPrefab: {fileID: 6955393450628161950, guid: 24234f50ca202be488f0d155910ff2f8, type: 3}
+  buildCount: 0
+  buildOffsetCount: 3
+  buildCountWidth: 10
   PixelSpacing: 1.1
 --- !u!4 &1879823294
 Transform:

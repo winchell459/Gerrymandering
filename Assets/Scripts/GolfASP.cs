@@ -14,7 +14,9 @@ public class GolfASP : MonoBehaviour
         StartJob();
     }
 
-    bool SolverDone = false;
+    [SerializeField] bool SolverDone = false;
+    [SerializeField] int buildCount = 1;
+    int complete = 0;
     // Update is called once per frame
     void Update()
     {
@@ -22,7 +24,16 @@ public class GolfASP : MonoBehaviour
         {
             FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
             FindObjectOfType<Map.Map>().AdjustCamera();
-            SolverDone = true;
+            complete += 1;
+            if(complete < buildCount)
+            {
+                StartJob();
+            }
+            else
+            {
+                SolverDone = true;
+            }
+            
         }
     }
 
@@ -77,11 +88,9 @@ public class GolfASP : MonoBehaviour
         path(XX,YY) :- tile(XX,YY,{tile_types.grass}), path(XX, YY-3).
         path(XX,YY) :- tile(XX,YY,{tile_types.grass}), path(XX, YY+3).
 
-        start_distance(1..2).
-        :- tile(XX,YY + Distance, {tile_types.start}), tile(XX,YY, {tile_types.hole}), start_distance(Distance).
-        :- tile(XX,YY - Distance, {tile_types.start}), tile(XX,YY, {tile_types.hole}), start_distance(Distance).
-        :- tile(XX + Distance,YY, {tile_types.start}), tile(XX,YY, {tile_types.hole}), start_distance(Distance).
-        :- tile(XX - Distance,YY, {tile_types.start}), tile(XX,YY, {tile_types.hole}), start_distance(Distance).
+        start_distance(-2..2).
+        :- tile(XX + DX,YY + DY, {tile_types.start}), tile(XX,YY, {tile_types.hole}), start_distance(DY), start_distance(DX).
+        
 
         
 
@@ -109,9 +118,13 @@ public class GolfASP : MonoBehaviour
 
 
         
-        
+        :- tile(X1,Y1,{tile_types.start}), tile(X2,Y2,{tile_types.hole}), X1 < max_width / 2, X2 < max_width / 2.
+        :- tile(X1,Y1,{tile_types.start}), tile(X2,Y2,{tile_types.hole}), X1 > max_width / 2, X2 > max_width / 2.
+        :- tile(X1,Y1,{tile_types.start}), tile(X2,Y2,{tile_types.hole}), Y1 < max_height / 2, Y2 < max_height / 2.
+        :- tile(X1,Y1,{tile_types.start}), tile(X2,Y2,{tile_types.hole}), Y1 > max_height / 2, Y2 > max_height / 2.
 
-        
+        %tile(2,max_height,{tile_types.start}).
+        %tile(max_width,5,{tile_types.hole}).
         
     ";
 

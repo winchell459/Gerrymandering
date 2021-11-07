@@ -35,5 +35,7 @@ namespace Map
 
             cam.transform.position = new Vector3(x, y, cam.transform.position.z);
         }
+
+        
     }
 }

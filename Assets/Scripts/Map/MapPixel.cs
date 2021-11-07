@@ -7,8 +7,28 @@ namespace Map
     public class MapPixel : Map2D
     {
         public Pixel PixelPrefab;
-        private Pixel[,] map;
-        
+        //private Pixel[,] map;
+
+        //[SerializeField] Transform mapPrefabHolder;
+        [SerializeField] int buildCount = 0;
+        [SerializeField] int buildOffsetCount = 1;
+        [SerializeField] int buildCountWidth = 1;
+        //[SerializeField] int buildCountY = 1;
+        private int BuildCount(int width)
+        {
+            int count = (buildCount % buildCountWidth) * (width + buildOffsetCount);
+            
+
+            return count;
+        }
+        private int BuildCountY(int height)
+        {
+            int count = (buildCount / buildCountWidth) * (height + buildOffsetCount);
+
+
+            return -count;
+        }
+
         public float PixelSpacing = 1.1f;
         protected override float getElementSpacing()
         {
@@ -30,12 +50,12 @@ namespace Map
                 if (int.Parse(h[0]) > height) height = int.Parse(h[0]);
             }
 
-            map = new Pixel[width, height];
+            //map = new Pixel[width, height];
 
             foreach (List<string> pixelASP in answerset[pixelKey])
             {
-                int x = int.Parse(pixelASP[xIndex]) - 1;
-                int y = int.Parse(pixelASP[yIndex]) - 1;
+                int x = int.Parse(pixelASP[xIndex]) - 1 + BuildCount(width);
+                int y = int.Parse(pixelASP[yIndex]) - 1 + BuildCountY(height);
 
                 string pixelType = pixelASP[pixelTypeIndex];
 
@@ -43,33 +63,10 @@ namespace Map
                 pixel.SetPixel(x * PixelSpacing, y * PixelSpacing, colorDict[pixelType]);
                 pixel.AddNote(pixelASP);
             }
+            buildCount += 1;
         }
 
-        //override public void AdjustCamera()
-        //{
-        //    Camera cam = Camera.main;
-        //    float aspect = cam.aspect;
-        //    float size = cam.orthographicSize;
-
-        //    float boardSizeHeight = height * PixelSpacing / 2 + (PixelSpacing - 1) / 2;
-        //    float boardSizeWidth = width * PixelSpacing / 2 + (PixelSpacing - 1) / 2;
-
-        //    float boardAspect = boardSizeWidth / boardSizeHeight;
-
-        //    float boardSizeX = boardSizeWidth / aspect;
-        //    float boardSize = aspect < boardAspect ? boardSizeX : boardSizeHeight;
-
-        //    cam.orthographicSize = boardSize;
-
-        //    float y = height / 2 * (1 + (PixelSpacing - 1));
-        //    float x = width / 2 * (1 + (PixelSpacing - 1));
-        //    if (width % 2 == 0) x -= (1 + (PixelSpacing - 1)) / 2;
-        //    if (height % 2 == 0) y -= (1 + (PixelSpacing - 1)) / 2;
-
-
-
-        //    cam.transform.position = new Vector3(x, y, cam.transform.position.z);
-        //}
+        
     }
 
 }
