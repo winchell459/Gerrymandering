@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GolfASP : MonoBehaviour
 {
     public Clingo.ClingoSolver Solver;
@@ -22,7 +23,11 @@ public class GolfASP : MonoBehaviour
     {
         if (!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
-            FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
+            //string json = JsonConvert.SerializeObject(Solver.answerSet, Formatting.Indented);
+            //string json = JsonUtility.ToJson(Solver.answerSet, true);
+            //Debug.Log(json);
+            Dictionary<string, List<List<string>>> answerSet = Solver.answerSet;// JsonUtility.FromJson<Dictionary<string, List<List<string>>>>(json);
+            FindObjectOfType<Map.Map>().DisplayMap(answerSet, mapKey);
             FindObjectOfType<Map.Map>().AdjustCamera();
             complete += 1;
             if(complete < buildCount)
@@ -110,12 +115,25 @@ public class GolfASP : MonoBehaviour
 
         move_tiles({tile_types.start};{tile_types.grass};{tile_types.hole}).
         max_jump(min_jumps..max_jumps).
+        mid_jump(1..max_jumps-1).
 
-        move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX+Jump,YY), moves(T+1), move_tiles(Tile), max_jump(Jump).
-        move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX-Jump,YY), moves(T+1), move_tiles(Tile), max_jump(Jump).
-        move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX,YY+Jump), moves(T+1), move_tiles(Tile), max_jump(Jump).
-        move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX,YY-Jump), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        %move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX+Jump,YY), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        %move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX-Jump,YY), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        %move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX,YY+Jump), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        %move(T+1, XX,YY) :- tile(XX,YY,Tile), move(T, XX,YY-Jump), moves(T+1), move_tiles(Tile), max_jump(Jump).
 
+        move(XX,YY,XX+Jump,YY) :- tile(XX,YY,Tile), move(T, XX+Jump,YY), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        move(XX,YY,XX-Jump,YY) :- tile(XX,YY,Tile), move(T, XX-Jump,YY), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        move(XX,YY,XX,YY+Jump) :- tile(XX,YY,Tile), move(T, XX,YY+Jump), moves(T+1), move_tiles(Tile), max_jump(Jump).
+        move(XX,YY,XX,YY-Jump) :- tile(XX,YY,Tile), move(T, XX,YY-Jump), moves(T+1), move_tiles(Tile), max_jump(Jump).
+
+        move(T+1, X1,Y1) :- move(X1,Y1,X2,Y2), move(T,X2,Y2), moves(T+1).
+
+        %% a move must not have an obstacle between the start and end tile
+        :- move(X1,Y1,X2,Y2), tile(X1+Mid_Point,Y1,{tile_types.obstacle}), mid_jump(Mid_Point), X2 - X1 - Mid_Point > 0, X2 > X1.
+        :- move(X1,Y1,X2,Y2), tile(X1-Mid_Point,Y1,{tile_types.obstacle}), mid_jump(Mid_Point), X1 - X2 - Mid_Point > 0, X2 < X1.
+        :- move(X1,Y1,X2,Y2), tile(X1,Y1+Mid_Point,{tile_types.obstacle}), mid_jump(Mid_Point), Y2 - Y1 - Mid_Point > 0, Y2 > Y1.
+        :- move(X1,Y1,X2,Y2), tile(X1,Y1-Mid_Point,{tile_types.obstacle}), mid_jump(Mid_Point), Y1 - Y2 - Mid_Point > 0, Y2 < Y1.
 
         
         :- tile(X1,Y1,{tile_types.start}), tile(X2,Y2,{tile_types.hole}), X1 < max_width / 2, X2 < max_width / 2.
