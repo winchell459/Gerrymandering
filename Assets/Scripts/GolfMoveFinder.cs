@@ -5,7 +5,93 @@ using UnityEngine;
 public class GolfMoveFinder : MonoBehaviour
 {
     private GolfBoardTile[,] moveGraph;
-    public void GenerateMoveGraph(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
+    private List<List<GolfBoardTile>> golfBoardTilePaths = new List<List<GolfBoardTile>>();
+    private GolfBoardTile startTile, endTile;
+    private List<int> movesList = new List<int>();
+
+    public void GenerateMoves(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
+    {
+        GenerateMoveGraph(answerset, minJump, maxJump);
+        GeneratePaths(minMoves, maxMoves);
+        for(int i = 0; i <= maxMoves; i+= 1)
+        {
+            movesList.Add(0);
+        }
+        foreach(List<GolfBoardTile> path in golfBoardTilePaths)
+        {
+            List<int> pathMoves = new List<int>();
+            for (int i = 0; i <= maxMoves; i += 1)
+            {
+                pathMoves.Add(0);
+            }
+            for(int i = 0; i < path.Count - 1; i += 1)
+            {
+                int jump = Mathf.Abs(path[i].x - path[i + 1].x) + Mathf.Abs(path[i].y - path[i + 1].y);
+                pathMoves[jump] += 1;
+            }
+            for(int i = 0; i < path.Count; i += 1)
+            {
+                movesList[i] = Mathf.Max(movesList[i], pathMoves[i]);
+            }
+        }
+        string moves = "";
+        for(int i = 0; i < movesList.Count; i+=1)
+        {
+            if (movesList[i] > 0) moves += movesList[i]+ " - " + i + " jumps ";
+        }
+        Debug.Log(moves);
+    }
+
+    public void GeneratePaths(/*Dictionary<string, List<List<string>>> answerset,*/ int minMoves, int maxMoves/*, int minJump, int maxJump*/)
+    {
+        
+        List<GolfBoardTile> startPath = new List<GolfBoardTile>();
+        startPath.Add(startTile);
+        GeneratePaths(startPath, minMoves, maxMoves);
+        foreach(List<GolfBoardTile> path in golfBoardTilePaths)
+        {
+            Debug.Log("Solution:");
+            printPath(path);
+        }
+    }
+
+    void printPath(List<GolfBoardTile> path)
+    {
+        string pathList = "";
+        foreach (GolfBoardTile tile in path)
+        {
+            pathList += "(" + tile.x + ", " + tile.y + ") ";
+        }
+        Debug.Log(pathList);
+    }
+
+    private void GeneratePaths(List<GolfBoardTile> path, int minMoves, int maxMoves)
+    {
+        //printPath(path);
+        //valid if lenght < minMoves then add
+        //invalid if lenght >= maxMoves then exit
+        //valid if lenght >= minMoves and lenght <= maxMoves and neighbour is endTile return path to endTile
+        //invalid if neighbour is already in path list 
+        GolfBoardTile current = path[path.Count - 1];
+        if (current == endTile)
+        {
+            if (path.Count -1 >= minMoves && path.Count -1 <= maxMoves) golfBoardTilePaths.Add( path);
+        }
+        else if(path.Count -1 < maxMoves)
+        {
+            foreach(GolfBoardTile frontier in current.moves)
+            {
+                if(!path.Contains(frontier))
+                {
+                    List<GolfBoardTile> newPath = new List<GolfBoardTile>(path);
+                    newPath.Add(frontier);
+                    GeneratePaths(newPath, minMoves, maxMoves);
+                }
+            }
+        }
+
+    }
+    public void GenerateMoveGraph(Dictionary<string, List<List<string>>> answerset, /*int minMoves, int maxMoves,*/ int minJump, int maxJump)
     {
         int height = UtilityASP.GetMaxInt(answerset["height"]);
         int width = UtilityASP.GetMaxInt(answerset["width"]);
@@ -23,6 +109,9 @@ public class GolfMoveFinder : MonoBehaviour
             moveGraph[x - 1, y - 1].tileType = tile_Type;
             moveGraph[x - 1, y - 1].x = x - 1;
             moveGraph[x - 1, y - 1].y = y - 1;
+
+            if (tile_Type == GolfASP.tile_types.start) startTile = moveGraph[x - 1, y - 1];
+            if (tile_Type == GolfASP.tile_types.hole) endTile = moveGraph[x - 1, y - 1];
         }
 
         for (int i = 0; i < width; i += 1)
@@ -130,7 +219,7 @@ public class GolfBoardTile
 {
     public int x, y;
     public List<GolfBoardTile> moves = new List<GolfBoardTile>();
-    public List<int> moveDistance = new List<int>();
+    //public List<int> moveDistance = new List<int>();
     public GolfASP.tile_types tileType;
 
     public void printMoves()

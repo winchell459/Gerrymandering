@@ -27,7 +27,7 @@ public class GolfASP : MonoBehaviour
             FindObjectOfType<Map.Map>().AdjustCamera();
             SolverDone = true;
 
-            FindObjectOfType<GolfMoveFinder>().GenerateMoveGraph(solver.answerSet, min_moves, max_moves, min_jumps, max_jumps);
+            FindObjectOfType<GolfMoveFinder>().GenerateMoves(solver.answerSet, min_moves, max_moves, min_jumps, max_jumps);
         }
     }
 
