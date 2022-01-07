@@ -6,15 +6,15 @@ public class GolfASP : MonoBehaviour
 {
     [SerializeField] private int width = 10, height = 10, max_moves = 5, min_moves = 4, max_jumps = 3, min_jumps = 1, threads = 4;
     [SerializeField] private Clingo.ClingoSolver solver;
-    [SerializeField] private Map.MapKey mapKey;
+    public Dictionary<string, List<List<string>>> answerSet { get { return solver.answerSet; } }
 
 
-    bool SolverDone = false;
+    public bool SolverDone = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartJob();
+        //StartJob();
     }
 
     // Update is called once per frame
@@ -22,16 +22,16 @@ public class GolfASP : MonoBehaviour
     {
         if (!SolverDone && solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
-            //FindObjectOfType<Map>().DisplayMap(Solver.answerSet,"width","height","block",0,2,3,colorDict);
-            FindObjectOfType<Map.Map>().DisplayMap(solver.answerSet, mapKey);
-            FindObjectOfType<Map.Map>().AdjustCamera();
+            
+            //FindObjectOfType<Map.Map>().DisplayMap(solver.answerSet, mapKey);
+            //FindObjectOfType<Map.Map>().AdjustCamera();
             SolverDone = true;
 
             FindObjectOfType<GolfMoveFinder>().GenerateMoves(solver.answerSet, min_moves, max_moves, min_jumps, max_jumps);
         }
     }
 
-    void StartJob()
+    public void StartJob()
     {
         string aspCode = GetASPCode();
         string filename = Clingo.ClingoUtil.CreateFile(aspCode);

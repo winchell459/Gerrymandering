@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class GolfTile : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int x, y;
+    private void OnMouseDown()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        FindObjectOfType<ASPLevelHandler>().GolfTileClicked(this);
     }
 }

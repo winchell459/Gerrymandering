@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 500e13d5c7eb7fb4f950ea6d18c67476, type: 3}
+  m_Name: GolfMapKeyBoard
+  m_EditorClassIdentifier: 
+  widthKey: width
+  heightKey: height
+  pixelKey: tile
+  xIndex: 0
+  yIndex: 1
+  pixelTypeIndex: 2
+  boardDict:
+    mapObjects:
+    - key: grass
+      obj: {fileID: 406832183420534294, guid: d9ae08c5c71726340b5c6bba530aeac6, type: 3}
+    - key: air
+      obj: {fileID: 6129325096556140460, guid: 718d90d1f2feb0442ac633e147da94a6, type: 3}
+    - key: obstacle
+      obj: {fileID: 3748652490873224444, guid: 5067d2fe5f09ee546ab13adf9487b0c4, type: 3}
+    - key: start
+      obj: {fileID: 406832183420534294, guid: d9ae08c5c71726340b5c6bba530aeac6, type: 3}
+    - key: hole
+      obj: {fileID: 1297004841829975964, guid: 5f6860b90b6f4e74591d80d604fb5a7b, type: 3}

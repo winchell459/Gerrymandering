@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,16 @@ public class GolfMoveFinder : MonoBehaviour
     private List<List<GolfBoardTile>> golfBoardTilePaths = new List<List<GolfBoardTile>>();
     private GolfBoardTile startTile, endTile;
     private List<int> movesList = new List<int>();
+
+    public Vector2Int GetStartLoc()
+    {
+        return new Vector2Int(startTile.x, startTile.y);
+    }
+
+    public Vector2Int GetEndLoc()
+    {
+        return new Vector2Int(endTile.x, endTile.y);
+    }
 
     public void GenerateMoves(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
     {
@@ -167,6 +176,8 @@ public class GolfMoveFinder : MonoBehaviour
 
     }
 
+    
+
     private bool validMove(Vector2Int end)
     {
         if(moveGraph[end.x,end.y].tileType == GolfASP.tile_types.air || moveGraph[end.x, end.y].tileType == GolfASP.tile_types.obstacle)
@@ -174,6 +185,11 @@ public class GolfMoveFinder : MonoBehaviour
             return false;
         }
         else { return true; }
+    }
+
+    public bool ValidMove(Vector2Int start, Vector2Int end)
+    {
+        return validMove(start, end);
     }
 
     private bool validMove(Vector2Int start, Vector2Int end)

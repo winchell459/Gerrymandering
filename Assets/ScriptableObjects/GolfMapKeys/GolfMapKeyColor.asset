@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3241332000a5f534991495d9c1bdf9f8, type: 3}
-  m_Name: GolfMapKey
+  m_Name: GolfMapKeyColor
   m_EditorClassIdentifier: 
   widthKey: width
   heightKey: height
