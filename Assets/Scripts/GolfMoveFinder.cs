@@ -8,6 +8,7 @@ public class GolfMoveFinder : MonoBehaviour
     private GolfBoardTile startTile, endTile;
     private List<int> movesList = new List<int>();
 
+    public List<int> MovesList { get { return movesList; } }
     public Vector2Int GetStartLoc()
     {
         return new Vector2Int(startTile.x, startTile.y);
@@ -20,16 +21,17 @@ public class GolfMoveFinder : MonoBehaviour
 
     public void GenerateMoves(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
     {
+        
         GenerateMoveGraph(answerset, minJump, maxJump);
         GeneratePaths(minMoves, maxMoves);
-        for(int i = 0; i <= maxMoves; i+= 1)
+        for(int i = 0; i <= maxJump; i+= 1)
         {
             movesList.Add(0);
         }
         foreach(List<GolfBoardTile> path in golfBoardTilePaths)
         {
             List<int> pathMoves = new List<int>();
-            for (int i = 0; i <= maxMoves; i += 1)
+            for (int i = 0; i <= maxJump; i += 1)
             {
                 pathMoves.Add(0);
             }
@@ -49,6 +51,7 @@ public class GolfMoveFinder : MonoBehaviour
             if (movesList[i] > 0) moves += movesList[i]+ " - " + i + " jumps ";
         }
         Debug.Log(moves);
+        Debug.Log($"movesList.Count: {movesList.Count} minMoves: {minMoves} maxMoves:{maxMoves} minJumps{minJump}  maxJumps{maxJump}");
     }
 
     public void GeneratePaths(/*Dictionary<string, List<List<string>>> answerset,*/ int minMoves, int maxMoves/*, int minJump, int maxJump*/)
@@ -189,7 +192,11 @@ public class GolfMoveFinder : MonoBehaviour
 
     public bool ValidMove(Vector2Int start, Vector2Int end)
     {
-        return validMove(start, end);
+        if (validMove(end))
+            return validMove(start, end);
+        else
+            return false;
+
     }
 
     private bool validMove(Vector2Int start, Vector2Int end)
@@ -209,7 +216,7 @@ public class GolfMoveFinder : MonoBehaviour
                 if (moveGraph[check.x, check.y].tileType == GolfASP.tile_types.obstacle) return false;
             }
         }
-        else
+        else if(start.y == end.y)
         {
             int dif = end.x - start.x;
             for (int i = 1; i < Mathf.Abs(dif); i += 1)
@@ -225,10 +232,16 @@ public class GolfMoveFinder : MonoBehaviour
                 if (moveGraph[check.x, check.y].tileType == GolfASP.tile_types.obstacle) return false;
             }
         }
+        else
+        {
+            return false;
+        }
 
 
         return true;
     }
+
+
 }
 
 public class GolfBoardTile
