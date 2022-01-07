@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class TabMove : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] int count;
+    int maxCount = 9;
+    int maxLength = 400;
+    public void SetMoveCount(int count)
     {
-        
+        RectTransform rect = GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(count * maxLength / maxCount, rect.sizeDelta.y);
+        this.count = count;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

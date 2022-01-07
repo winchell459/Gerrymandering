@@ -30,6 +30,7 @@ public class GolfMoveFinder : MonoBehaviour
         }
         foreach(List<GolfBoardTile> path in golfBoardTilePaths)
         {
+            printPath(path);
             List<int> pathMoves = new List<int>();
             for (int i = 0; i <= maxJump; i += 1)
             {
@@ -40,7 +41,7 @@ public class GolfMoveFinder : MonoBehaviour
                 int jump = Mathf.Abs(path[i].x - path[i + 1].x) + Mathf.Abs(path[i].y - path[i + 1].y);
                 pathMoves[jump] += 1;
             }
-            for(int i = 0; i < path.Count; i += 1)
+            for(int i = 0; i < pathMoves.Count; i += 1)
             {
                 movesList[i] = Mathf.Max(movesList[i], pathMoves[i]);
             }
@@ -60,11 +61,11 @@ public class GolfMoveFinder : MonoBehaviour
         List<GolfBoardTile> startPath = new List<GolfBoardTile>();
         startPath.Add(startTile);
         GeneratePaths(startPath, minMoves, maxMoves);
-        foreach(List<GolfBoardTile> path in golfBoardTilePaths)
-        {
-            Debug.Log("Solution:");
-            printPath(path);
-        }
+        //foreach(List<GolfBoardTile> path in golfBoardTilePaths)
+        //{
+        //    Debug.Log("Solution:");
+        //    printPath(path);
+        //}
     }
 
     void printPath(List<GolfBoardTile> path)
@@ -169,13 +170,13 @@ public class GolfMoveFinder : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < width; i += 1)
-        {
-            for (int j = 0; j < height; j += 1)
-            {
-                moveGraph[i, j].printMoves();
-            }
-        }
+        //for (int i = 0; i < width; i += 1)
+        //{
+        //    for (int j = 0; j < height; j += 1)
+        //    {
+        //        moveGraph[i, j].printMoves();
+        //    }
+        //}
 
     }
 
