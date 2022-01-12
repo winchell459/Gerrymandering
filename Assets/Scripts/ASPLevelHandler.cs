@@ -18,6 +18,7 @@ public class ASPLevelHandler : MonoBehaviour
     static ASPMemory<MoveEvents> memory;
     [SerializeField] private ASPMemory<MoveEvents> _memory;
     static private int round;
+    private int turnCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +41,10 @@ public class ASPLevelHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!waitingForASP && moveFinder.GetEndLoc() == currentPos && FindObjectOfType<Ball>().Stopped)
+        {
+            reloadScene();
+        }
         if(waitingForASP && golfASP.SolverDone)
         {
             FindObjectOfType<Map.Map>().DisplayMap(golfASP.answerSet, mapKey);
@@ -51,6 +56,27 @@ public class ASPLevelHandler : MonoBehaviour
             waitingForASP = false;
         }
     }
+    public void UndoMoveButton()
+    {
+        undoMove();
+    }
+
+    private void undoMove()
+    {
+        if (turnCount > 0 && FindObjectOfType<Ball>().Stopped)
+        {
+            Vector2Int lastMove = getLastMove();
+            int distance = (int) lastMove.magnitude;
+            movesList[distance] += 1;
+
+            undoMemory();
+
+            setPlayerDestination(currentPos - lastMove);
+
+            turnCount -= 1;
+            updateUIHandler();
+        }
+    }
 
     public void ReloadSceneButton()
     {
@@ -60,6 +86,20 @@ public class ASPLevelHandler : MonoBehaviour
     {
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
+
+    Vector2Int getLastMove()
+    {
+        Vector2Int previous, current;
+        previous = memory.Events.MovesPath[memory.Events.MovesPath.Count - 1].Moves[turnCount - 1];
+        current = memory.Events.MovesPath[memory.Events.MovesPath.Count - 1].Moves[turnCount];
+        return new Vector2Int(current.x - previous.x, current.y - previous.y);
+    }
+
+    void undoMemory()
+    {
+        memory.Events.MovesPath[memory.Events.MovesPath.Count - 1].Moves.RemoveAt(turnCount);
+        memory.Events.MovesPath[memory.Events.MovesPath.Count - 1].Moves.RemoveAt(turnCount - 1);
     }
 
     void addNewMemory()
@@ -110,7 +150,7 @@ public class ASPLevelHandler : MonoBehaviour
 
     public void GolfTileClicked(GolfTile tile)
     {
-        if (moveFinder.ValidMove(currentPos, tile.pos))
+        if (FindObjectOfType<Ball>().Stopped && moveFinder.ValidMove(currentPos, tile.pos))
         {
             int distance = 0;
             if(currentPos.x == tile.pos.x)
@@ -128,10 +168,16 @@ public class ASPLevelHandler : MonoBehaviour
 
             if (checkMoves(distance))
             {
-                movesList[distance] -= 1;
-                setPlayerDestination(new Vector2Int(tile.x, tile.y));
+                if (FindObjectOfType<Ball>().Stopped)
+                {
+                    movesList[distance] -= 1;
+                    setPlayerDestination(new Vector2Int(tile.x, tile.y));
 
-                FindObjectOfType<UIHandler>().MovesList = movesList;
+                    turnCount += 1;
+                    updateUIHandler();
+                }
+                
+                
 
                 string moves = "";
                 for (int i = 0; i < movesList.Count; i += 1)
@@ -141,8 +187,17 @@ public class ASPLevelHandler : MonoBehaviour
                 Debug.Log(moves);
             }
             
+        }else if (!FindObjectOfType<Ball>().Stopped && tile.x == currentPos.x && tile.y == currentPos.y)
+        {
+            Debug.Log($"Double Clicked: {tile}");
+            setPlayerPosition(new Vector2Int(tile.x, tile.y));
         }
-        
+
+    }
+
+    private void updateUIHandler()
+    {
+        FindObjectOfType<UIHandler>().MovesList = movesList;
     }
 
     private bool checkMoves(int distance)
