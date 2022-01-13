@@ -11,6 +11,9 @@ public class UIHandler : MonoBehaviour
     [SerializeField] protected int _round;
     public int Round { get { return _round; } set { setRound(value); } }
 
+    [SerializeField] protected float _timeRemainig;
+    public float TimeRemainig { set { setTimeRemaining(value); } }
+
     virtual protected void setMovesList(List<int> movesList)
     {
         _movesList = movesList;
@@ -22,4 +25,12 @@ public class UIHandler : MonoBehaviour
         _round = round;
         FindObjectOfType<RoundUIHandler>().Round = round;
     }
+
+    virtual protected void setTimeRemaining(float timeRemaining)
+    {
+        _timeRemainig = timeRemaining;
+        FindObjectOfType<RoundUIHandler>().TimeRemaining = timeRemaining;
+    }
+
+
 }

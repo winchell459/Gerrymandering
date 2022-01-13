@@ -8,6 +8,8 @@ public class Ball : MonoBehaviour
     [SerializeField] private Vector2 destination;
     private bool moving;
     public bool Stopped { get { return !moving; } }
+    private bool movingForward;
+    public bool MovingForward { get { return movingForward; } set { movingForward = value; } }
     // Start is called before the first frame update
     void Start()
     {

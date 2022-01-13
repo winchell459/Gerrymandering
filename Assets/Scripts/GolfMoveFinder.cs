@@ -24,7 +24,8 @@ public class GolfMoveFinder : MonoBehaviour
         
         GenerateMoveGraph(answerset, minJump, maxJump);
         GeneratePaths(minMoves, maxMoves);
-        for(int i = 0; i <= maxJump; i+= 1)
+        movesList = new List<int>();
+        for (int i = 0; i <= maxJump; i+= 1)
         {
             movesList.Add(0);
         }
