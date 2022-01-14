@@ -7,6 +7,7 @@ public class GolfMoveFinder : MonoBehaviour
     private List<List<GolfBoardTile>> golfBoardTilePaths = new List<List<GolfBoardTile>>();
     private GolfBoardTile startTile, endTile;
     private List<int> movesList = new List<int>();
+    public List<int> MovesList{ get{return movesList;}}
 
     public Vector2Int GetStartLoc()
     {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threadPriority: 32
   aspFilePath: DataFiles/ASPFiles/queens.txt
-  clingoExecutablePathMacOS: DataFiles/Clingo/clingo
+  clingoExecutablePathMacOS: ASP/ClingoBinaries/MacOS/clingo
   clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
   AdditionalArguments: 
   maxDuration: 10
@@ -392,12 +392,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapKey: {fileID: 11400000, guid: 2d431c49aebdd084faf598e88c2202cc, type: 2}
-  Player: {fileID: 1725989731}
---- !u!1 &1725989731 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8705923846271873138, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
+--- !u!114 &1725989732 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8705923846271873038, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
   m_PrefabInstance: {fileID: 8705923846802025679}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5252e4887fc69424689dd0c2253fe073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1895788733
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,6 +549,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2131609302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2131609304}
+  - component: {fileID: 2131609303}
+  m_Layer: 0
+  m_Name: GameHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2131609303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131609302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be2003ff08be42f395a72fcaa808985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1725989732}
+  board: {fileID: 1122965895}
+  currentPos: {x: 0, y: 0}
+  movesList: 
+--- !u!4 &2131609304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131609302}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.173532, y: -5.066311, z: -1.754787}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8705923846802025679
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -551,6 +603,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -564,6 +620,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -574,14 +634,6 @@ PrefabInstance:
     - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8705923846271873039, guid: e4ec5e467147f264b98a10a3e3c24e72, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
