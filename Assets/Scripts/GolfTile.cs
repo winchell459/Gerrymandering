@@ -5,8 +5,9 @@ using UnityEngine;
 public class GolfTile : MonoBehaviour
 {
     public int x, y;
+    public Vector2Int pos { get { return new Vector2Int(x, y); } }
     private void OnMouseDown()
     {
-        FindObjectOfType<ASPLevelHandler>().GolfTileClicked(this);
+        FindObjectOfType<GameHandler>().GolfTileClicked(this);
     }
 }
