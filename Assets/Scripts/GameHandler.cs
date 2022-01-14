@@ -164,7 +164,7 @@ public class GameHandler : MonoBehaviour
 
     public void QuitGameButton()
     {
-        
+        round = 0;
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
