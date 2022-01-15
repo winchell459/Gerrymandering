@@ -7,7 +7,7 @@ namespace Map
     public class MapBoard : Map2D
     {
         private GolfTile[,] map;
-        public float tileSpacing = 1.1f;
+        public float TileSpacing { get { return tileSpacing; } }
 
         override public void DisplayMap(Dictionary<string, List<List<string>>> answerset, MapKey mapKey)
         {

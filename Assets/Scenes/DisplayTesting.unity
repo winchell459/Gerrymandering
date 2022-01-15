@@ -298,7 +298,7 @@ MonoBehaviour:
   min_jumps: 2
   threads: 4
   solver: {fileID: 1589100434}
-  mapKey: {fileID: 11400000, guid: fbc9cf44415a835428fe1b306d686d5b, type: 2}
+  SolverDone: 0
 --- !u!1 &973881505
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,29 +398,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
-      propertyPath: maxDuration
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
-      propertyPath: useRandomSeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
-      propertyPath: AdditionalArguments
-      value: --parallel-mode 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
-      propertyPath: clingoExecutablePathMacOS
-      value: ASP/ClingoBinaries/MacOS/clingo
-      objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139477, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_Name
       value: Solver
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_LocalPosition.x
@@ -435,10 +415,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -449,6 +425,14 @@ PrefabInstance:
     - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139479, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

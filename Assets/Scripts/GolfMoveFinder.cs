@@ -53,7 +53,7 @@ public class GolfMoveFinder : MonoBehaviour
             if (movesList[i] > 0) moves += movesList[i] + " - " + i + " jumps ";
         }
         Debug.Log(moves);
-        Debug.Log($"movesList.Count: {movesList.Count} minMoves: {minMoves} maxMoves:{maxMoves} minJumps{minJump}  maxJumps{maxJump}");
+        Debug.Log($"movesList.Count: {movesList.Count} minMoves: {minMoves} maxMoves:{maxMoves} minJumps: {minJump}  maxJumps: {maxJump}");
     }
 
     public void GeneratePaths(/*Dictionary<string, List<List<string>>> answerset,*/ int minMoves, int maxMoves/*, int minJump, int maxJump*/)

@@ -9,7 +9,7 @@ public class ASPLevelHandler : MonoBehaviour
     private bool waitingForASP;
     public bool Ready { get { return !waitingForASP; } }
 
-    private float tileSpacing { get { return FindObjectOfType<Map.MapBoard>().tileSpacing; } }
+    private float tileSpacing { get { return FindObjectOfType<Map.MapBoard>().TileSpacing; } }
 
     // Start is called before the first frame update
     void Start()

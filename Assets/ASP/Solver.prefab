@@ -43,8 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a099bab5c874424087a23890eae1a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aspFile: {fileID: 4900000, guid: c0ebb434787f44f5eaf186c566cc537b, type: 3}
-  clingoExecutablePathMacOS: Assets/ASP/ClingoBinaries/MacOS/clingo
-  maxDuration: 10
-  multipleSolution: 1
+  threadPriority: 32
+  aspFilePath: DataFiles/ASPFiles/queens.txt
+  clingoExecutablePathMacOS: ASP/ClingoBinaries/MacOS/clingo
+  clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
+  AdditionalArguments: --parallel-mode 4
+  maxDuration: 500
+  FindMultipleSolutions: 0
   numOfSolutionsWanted: 0
+  seed: 42
+  useRandomSeed: 1
+  saveToFile: 1
