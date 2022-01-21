@@ -13,10 +13,15 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private Vector2Int currentPos;
     [SerializeField] private List<int> movesList;
 
+    public static int Round = 0;
+
+    [SerializeField] UnityEngine.UI.Text roundText;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Round += 1;
+        roundText.text = Round.ToString();
     }
 
     // Update is called once per frame
@@ -25,6 +30,11 @@ public class GameHandler : MonoBehaviour
         if(!gameOver && !gamePlayMode && board.Ready)
         {
             startRound();
+        }
+        else if (!gameOver && gamePlayMode && moveFinder.GetEndLoc() == currentPos && player.Stopped)
+        {
+            int currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentScene);
         }
     }
 
@@ -56,7 +66,9 @@ public class GameHandler : MonoBehaviour
 
     void setPlayerDestination(Vector2Int destination)
     {
+
         currentPos = destination;
+        board.AddToMemory(destination);
         setPlayerDestination(board.GetTilePos(destination));
     }
 
