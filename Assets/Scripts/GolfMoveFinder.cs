@@ -19,17 +19,54 @@ public class GolfMoveFinder : MonoBehaviour
         return new Vector2Int(endTile.x, endTile.y);
     }
 
-    public void GenerateMoves(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
-    {
+    //public void GenerateMoves(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
+    //{
         
+    //    GenerateMoveGraph(answerset, minJump, maxJump);
+    //    GeneratePaths(minMoves, maxMoves);
+    //    movesList = new List<int>();
+    //    for (int i = 0; i <= maxJump; i+= 1)
+    //    {
+    //        movesList.Add(0);
+    //    }
+    //    foreach(List<GolfBoardTile> path in golfBoardTilePaths)
+    //    {
+    //        printPath(path);
+    //        List<int> pathMoves = new List<int>();
+    //        for (int i = 0; i <= maxJump; i += 1)
+    //        {
+    //            pathMoves.Add(0);
+    //        }
+    //        for(int i = 0; i < path.Count - 1; i += 1)
+    //        {
+    //            int jump = Mathf.Abs(path[i].x - path[i + 1].x) + Mathf.Abs(path[i].y - path[i + 1].y);
+    //            pathMoves[jump] += 1;
+    //        }
+    //        for(int i = 0; i < pathMoves.Count; i += 1)
+    //        {
+    //            movesList[i] = Mathf.Max(movesList[i], pathMoves[i]);
+    //        }
+    //    }
+    //    string moves = "";
+    //    for(int i = 0; i < movesList.Count; i+=1)
+    //    {
+    //        if (movesList[i] > 0) moves += movesList[i]+ " - " + i + " jumps ";
+    //    }
+    //    Debug.Log(moves);
+    //    Debug.Log($"movesList.Count: {movesList.Count} minMoves: {minMoves} maxMoves:{maxMoves} minJumps{minJump}  maxJumps{maxJump}");
+    //}
+
+    public void GenerateMoves(Clingo.AnswerSet answerset, int minMoves, int maxMoves, int minJump, int maxJump)
+    {
+
         GenerateMoveGraph(answerset, minJump, maxJump);
         GeneratePaths(minMoves, maxMoves);
         movesList = new List<int>();
-        for (int i = 0; i <= maxJump; i+= 1)
+        for (int i = 0; i <= maxJump; i += 1)
         {
             movesList.Add(0);
         }
-        foreach(List<GolfBoardTile> path in golfBoardTilePaths)
+        foreach (List<GolfBoardTile> path in golfBoardTilePaths)
         {
             printPath(path);
             List<int> pathMoves = new List<int>();
@@ -37,20 +74,20 @@ public class GolfMoveFinder : MonoBehaviour
             {
                 pathMoves.Add(0);
             }
-            for(int i = 0; i < path.Count - 1; i += 1)
+            for (int i = 0; i < path.Count - 1; i += 1)
             {
                 int jump = Mathf.Abs(path[i].x - path[i + 1].x) + Mathf.Abs(path[i].y - path[i + 1].y);
                 pathMoves[jump] += 1;
             }
-            for(int i = 0; i < pathMoves.Count; i += 1)
+            for (int i = 0; i < pathMoves.Count; i += 1)
             {
                 movesList[i] = Mathf.Max(movesList[i], pathMoves[i]);
             }
         }
         string moves = "";
-        for(int i = 0; i < movesList.Count; i+=1)
+        for (int i = 0; i < movesList.Count; i += 1)
         {
-            if (movesList[i] > 0) moves += movesList[i]+ " - " + i + " jumps ";
+            if (movesList[i] > 0) moves += movesList[i] + " - " + i + " jumps ";
         }
         Debug.Log(moves);
         Debug.Log($"movesList.Count: {movesList.Count} minMoves: {minMoves} maxMoves:{maxMoves} minJumps{minJump}  maxJumps{maxJump}");
@@ -105,19 +142,95 @@ public class GolfMoveFinder : MonoBehaviour
         }
 
     }
-    public void GenerateMoveGraph(Dictionary<string, List<List<string>>> answerset, /*int minMoves, int maxMoves,*/ int minJump, int maxJump)
-    {
-        int height = UtilityASP.GetMaxInt(answerset["height"]);
-        int width = UtilityASP.GetMaxInt(answerset["width"]);
+    //public void GenerateMoveGraph(Dictionary<string, List<List<string>>> answerset, /*int minMoves, int maxMoves,*/ int minJump, int maxJump)
+    //{
+    //    int height = UtilityASP.GetMaxInt(answerset["height"]);
+    //    int width = UtilityASP.GetMaxInt(answerset["width"]);
 
-        moveGraph = new GolfBoardTile[width, height];
+    //    moveGraph = new GolfBoardTile[width, height];
         
 
-        foreach(List<string> tileStr in answerset["tile"])
+    //    foreach(List<string> tileStr in answerset["tile"])
+    //    {
+    //        int x = int.Parse(tileStr[0]);
+    //        int y = int.Parse(tileStr[1]);
+    //        GolfASP.tile_types tile_Type = (GolfASP.tile_types) System.Enum.Parse(typeof(GolfASP.tile_types), tileStr[2]);
+
+    //        moveGraph[x - 1, y - 1] = new GolfBoardTile();
+    //        moveGraph[x - 1, y - 1].tileType = tile_Type;
+    //        moveGraph[x - 1, y - 1].x = x - 1;
+    //        moveGraph[x - 1, y - 1].y = y - 1;
+
+    //        if (tile_Type == GolfASP.tile_types.start) startTile = moveGraph[x - 1, y - 1];
+    //        if (tile_Type == GolfASP.tile_types.hole) endTile = moveGraph[x - 1, y - 1];
+    //    }
+
+    //    for (int i = 0; i < width; i += 1)
+    //    {
+    //        for (int j = 0; j < height; j += 1)
+    //        {
+    //            Vector2Int start = new Vector2Int(i, j);
+    //            for(int r = minJump; r <= maxJump; r += 1)
+    //            {
+    //                if(i + r < width)
+    //                {
+    //                    Vector2Int end = new Vector2Int(i + r, j);
+    //                    if(validMove(end) && validMove(start, end))
+    //                    {
+    //                        moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
+    //                    }
+    //                }
+    //                if(i - r >= 0)
+    //                {
+    //                    Vector2Int end = new Vector2Int(i - r, j);
+    //                    if (validMove(end) && validMove(start, end))
+    //                    {
+    //                        moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
+    //                    }
+    //                }
+    //                if(j + r < height)
+    //                {
+    //                    Vector2Int end = new Vector2Int(i, j + r);
+    //                    if (validMove(end) && validMove(start, end))
+    //                    {
+    //                        moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
+    //                    }
+    //                }
+    //                if(j - r >= 0)
+    //                {
+    //                    Vector2Int end = new Vector2Int(i, j - r);
+    //                    if (validMove(end) && validMove(start, end))
+    //                    {
+    //                        moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    //for (int i = 0; i < width; i += 1)
+    //    //{
+    //    //    for (int j = 0; j < height; j += 1)
+    //    //    {
+    //    //        moveGraph[i, j].printMoves();
+    //    //    }
+    //    //}
+
+    //}
+
+    public void GenerateMoveGraph(Clingo.AnswerSet answerset, /*int minMoves, int maxMoves,*/ int minJump, int maxJump)
+    {
+        int height = UtilityASP.GetMaxInt(answerset.Value["height"]);
+        int width = UtilityASP.GetMaxInt(answerset.Value["width"]);
+
+        moveGraph = new GolfBoardTile[width, height];
+
+
+        foreach (List<string> tileStr in answerset.Value["tile"])
         {
             int x = int.Parse(tileStr[0]);
             int y = int.Parse(tileStr[1]);
-            GolfASP.tile_types tile_Type = (GolfASP.tile_types) System.Enum.Parse(typeof(GolfASP.tile_types), tileStr[2]);
+            GolfASP.tile_types tile_Type = (GolfASP.tile_types)System.Enum.Parse(typeof(GolfASP.tile_types), tileStr[2]);
 
             moveGraph[x - 1, y - 1] = new GolfBoardTile();
             moveGraph[x - 1, y - 1].tileType = tile_Type;
@@ -133,17 +246,17 @@ public class GolfMoveFinder : MonoBehaviour
             for (int j = 0; j < height; j += 1)
             {
                 Vector2Int start = new Vector2Int(i, j);
-                for(int r = minJump; r <= maxJump; r += 1)
+                for (int r = minJump; r <= maxJump; r += 1)
                 {
-                    if(i + r < width)
+                    if (i + r < width)
                     {
                         Vector2Int end = new Vector2Int(i + r, j);
-                        if(validMove(end) && validMove(start, end))
+                        if (validMove(end) && validMove(start, end))
                         {
                             moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
                         }
                     }
-                    if(i - r >= 0)
+                    if (i - r >= 0)
                     {
                         Vector2Int end = new Vector2Int(i - r, j);
                         if (validMove(end) && validMove(start, end))
@@ -151,7 +264,7 @@ public class GolfMoveFinder : MonoBehaviour
                             moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
                         }
                     }
-                    if(j + r < height)
+                    if (j + r < height)
                     {
                         Vector2Int end = new Vector2Int(i, j + r);
                         if (validMove(end) && validMove(start, end))
@@ -159,7 +272,7 @@ public class GolfMoveFinder : MonoBehaviour
                             moveGraph[start.x, start.y].moves.Add(moveGraph[end.x, end.y]);
                         }
                     }
-                    if(j - r >= 0)
+                    if (j - r >= 0)
                     {
                         Vector2Int end = new Vector2Int(i, j - r);
                         if (validMove(end) && validMove(start, end))
@@ -181,7 +294,6 @@ public class GolfMoveFinder : MonoBehaviour
 
     }
 
-    
 
     private bool validMove(Vector2Int end)
     {

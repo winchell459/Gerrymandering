@@ -6,8 +6,8 @@ public class GolfASP : MonoBehaviour
 {
     [SerializeField] private int width = 10, height = 10, max_moves = 5, min_moves = 4, max_jumps = 3, min_jumps = 1, threads = 4;
     [SerializeField] private Clingo.ClingoSolver solver;
-    public Dictionary<string, List<List<string>>> answerSet { get { return solver.answerSet; } }
-
+    //public Dictionary<string, List<List<string>>> answerSet { get { return solver.answerSet; } }
+    public Clingo.AnswerSet answerSet { get { return solver.answerSet; } }
 
     public bool SolverDone = false;
 
@@ -25,26 +25,39 @@ public class GolfASP : MonoBehaviour
 
             //FindObjectOfType<Map.Map>().DisplayMap(solver.answerSet, mapKey);
             //FindObjectOfType<Map.Map>().AdjustCamera();
+
+            //FindObjectOfType<GolfMoveFinder>().GenerateMoves(solver.answerSet, min_moves, max_moves, min_jumps, max_jumps);
             FindObjectOfType<GolfMoveFinder>().GenerateMoves(solver.answerSet, min_moves, max_moves, min_jumps, max_jumps);
             Debug.LogWarning("GolfASP finishing");
             SolverDone = true;
 
-            
+
         }
-    }
+        else if (!SolverDone && solver.SolverStatus == Clingo.ClingoSolver.Status.ERROR)
+        {
+            Debug.LogWarning("Clingo Error");
+        }
+        }
 
     public void StartJob()
     {
         string aspCode = GetASPCode();
-        string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-        solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}");
+        //string filename = Clingo.ClingoUtil.CreateFile(aspCode);
+        //solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}");
+
+        
+        solver.Solve(aspCode, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}", false);
+
     }
     public void StartJob(ASPMemory<MoveEvents> memory)
     {
 
         string aspCode = GetASPCode() + memory.Events.GetMoves();
-        string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-        solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}");
+        //string filename = Clingo.ClingoUtil.CreateFile(aspCode);
+        //solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}");
+
+        solver.Solve(aspCode, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}", false);
+
     }
 
     string GetASPCode()

@@ -9,24 +9,24 @@ namespace Map
         private GolfTile[,] map;
         public float tileSpacing = 1.1f;
 
-        override public void DisplayMap(Dictionary<string, List<List<string>>> answerset, MapKey mapKey)
+        override public void DisplayMap(Clingo.AnswerSet answerset, MapKey mapKey)
         {
             DisplayMap(answerset, mapKey.widthKey, mapKey.heightKey, mapKey.pixelKey, mapKey.xIndex, mapKey.yIndex, mapKey.pixelTypeIndex, ((MapKeyBoard)mapKey).boardDict);
         }
-        public void DisplayMap(Dictionary<string, List<List<string>>> answerset, string widthKey, string heightKey, string tileKey, int xIndex, int yIndex, int pixelTypeIndex, MapObjectKey<GameObject> tileDict)
+        public void DisplayMap(Clingo.AnswerSet answerset, string widthKey, string heightKey, string tileKey, int xIndex, int yIndex, int pixelTypeIndex, MapObjectKey<GameObject> tileDict)
         {
-            foreach (List<string> widths in answerset[widthKey])
+            foreach (List<string> widths in answerset.Value[widthKey])
             {
                 if (int.Parse(widths[0]) > width) width = int.Parse(widths[0]);
             }
-            foreach (List<string> h in answerset[heightKey])
+            foreach (List<string> h in answerset.Value[heightKey])
             {
                 if (int.Parse(h[0]) > height) height = int.Parse(h[0]);
             }
 
             map = new GolfTile[width, height];
 
-            foreach (List<string> pixelASP in answerset[tileKey])
+            foreach (List<string> pixelASP in answerset.Value[tileKey])
             {
                 int x = int.Parse(pixelASP[xIndex]) - 1;
                 int y = int.Parse(pixelASP[yIndex]) - 1;

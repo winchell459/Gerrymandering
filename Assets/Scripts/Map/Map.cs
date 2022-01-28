@@ -8,7 +8,7 @@ namespace Map
     {
         protected int width, height;
 
-        public abstract void DisplayMap(Dictionary<string, List<List<string>>> answerset, MapKey mapKey);
+        public abstract void DisplayMap(Clingo.AnswerSet answerset, MapKey mapKey);
         public abstract void AdjustCamera();
     }
 

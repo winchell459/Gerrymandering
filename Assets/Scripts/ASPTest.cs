@@ -32,6 +32,8 @@ public class ASPTest : MonoBehaviour
         if (!SolverDone && Solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
             //FindObjectOfType<Map>().DisplayMap(Solver.answerSet,"width","height","block",0,2,3,colorDict);
+
+            //FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
             FindObjectOfType<Map.Map>().DisplayMap(Solver.answerSet, mapKey);
             SolverDone = true;
         }
