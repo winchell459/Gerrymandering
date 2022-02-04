@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,75 +11,103 @@ public class GameHandler : MonoBehaviour
     [SerializeField] ASPLevelHandler board;
 
     [SerializeField] private Vector2Int currentPos;
-    [SerializeField] public List<int> movesList;
+    [SerializeField] private List<int> movesList;
+
+    public static int Round = 0;
+
+    [SerializeField] UnityEngine.UI.Text roundText;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Round += 1;
+        roundText.text = Round.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!gameOver && !gamePlayMode && board.Ready){
+        if(!gameOver && !gamePlayMode && board.Ready)
+        {
             startRound();
+        }else if (!gameOver && gamePlayMode && moveFinder.GetEndLoc() == currentPos && player.Stopped)
+        {
+            int currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentScene);
         }
     }
 
-    void startRound(){
+    void startRound()
+    {
         moveFinder = FindObjectOfType<GolfMoveFinder>();
         movesList = moveFinder.MovesList;
         setPlayerDestination(moveFinder.GetStartLoc(), true);
         gamePlayMode = true;
     }
 
-     void setPlayerDestination(Vector2Int destination, bool setPosition)
-    {
-        if(setPosition){
-            setPlayerPosition(destination);
-        }
-        setPlayerDestination(board.GetTilePos(destination));
-    }
-
-
     void setPlayerDestination(Vector2 destination)
     {
         player.SetDestination(destination);
+    }
+    /// <summary>
+    /// set player destination and position
+    /// </summary>
+    /// <param name="destination"></param>
+    /// <param name="setPosition"></param>
+    void setPlayerDestination(Vector2Int destination, bool setPosition)
+    {
+        if (setPosition)
+        {
+            setPlayerPosition(destination);
+        }
+        setPlayerDestination(destination);
     }
 
     void setPlayerDestination(Vector2Int destination)
     {
         currentPos = destination;
+        board.AddToMemory(destination);
         setPlayerDestination(board.GetTilePos(destination));
     }
 
     void setPlayerPosition(Vector2Int pos)
     {
         player.transform.position = board.GetTilePos(pos);
+        
     }
-
 
     public void GolfTileClicked(GolfTile tile)
     {
-        if(gameOver) return;
-        if(player.Stopped && moveFinder.ValidMove(currentPos, tile.pos)){
+        if (gameOver) return;
+        if (player.Stopped && moveFinder.ValidMove(currentPos, tile.pos))
+        {
             int distance = 0;
-            if(currentPos.x == tile.pos.x){
+            if(currentPos.x == tile.pos.x)
+            {
                 distance = Mathf.Abs(currentPos.y - tile.pos.y);
-            }else if(currentPos.y == tile.pos.y){
+            }else if(currentPos.y == tile.pos.y)
+            {
                 distance = Mathf.Abs(currentPos.x - tile.pos.x);
-            }else{
+            }
+            else
+            {
                 Debug.LogWarning("Diagonal moves not implemented");
             }
-            if(checkMoves(distance)){
+
+            if (checkMoves(distance))
+            {
                 movesList[distance] -= 1;
                 setPlayerDestination(new Vector2Int(tile.x, tile.y));
             }
+
         }
+
+        
     }
 
-    private bool checkMoves(int distance){
-        if(distance < movesList.Count && movesList[distance] > 0) return true;
+    private bool checkMoves(int distance)
+    {
+        if (distance < movesList.Count && movesList[distance] > 0) return true;
         else return false;
     }
 }

@@ -230,6 +230,16 @@ public class GolfMoveFinder : MonoBehaviour
 
         return true;
     }
+
+    public bool isTileType(Vector2Int coords, GolfASP.tile_types type)
+    {
+        if(moveGraph[coords.x,coords.y].tileType == type)
+        {
+            return true;
+        }
+        else { return false; }
+    }
+
 }
 
 public class GolfBoardTile

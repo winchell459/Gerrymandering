@@ -31,9 +31,9 @@ public class GolfASP : MonoBehaviour
         }
     }
 
-    public void StartJob()
+    public void StartJob(ASPMemory<MoveEvents> memory)
     {
-        string aspCode = GetASPCode();
+        string aspCode = GetASPCode() + memory.Events.GetMoves();
         string filename = Clingo.ClingoUtil.CreateFile(aspCode);
         solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}");
     }
