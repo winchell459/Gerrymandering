@@ -99,7 +99,7 @@ public class MoveEvents{
             for(int i=1; i < moveEvent.Moves.Count; i += 1){
                 Vector2Int start = moveEvent.Moves[i-1];
                 Vector2Int end = moveEvent.Moves[i];
-                aspMoves += $" :- move({start.x}, {start.y}, {end.x}, {end.y}). \n";
+                aspMoves += $" :- move({start.x + 1}, {start.y + 1}, {end.x + 1}, {end.y + 1}). \n";
 
             }
         }

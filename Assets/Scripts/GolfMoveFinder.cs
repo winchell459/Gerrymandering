@@ -19,6 +19,11 @@ public class GolfMoveFinder : MonoBehaviour
         return new Vector2Int(endTile.x, endTile.y);
     }
 
+    public GolfBoardTile GetTile(Vector2 pos)
+    {
+        return moveGraph[(int)pos.x, (int)pos.y];
+    }
+
     public void GenerateMoves(Dictionary<string, List<List<string>>> answerset, int minMoves, int maxMoves, int minJump, int maxJump)
     {
         GenerateMoveGraph(answerset, minJump, maxJump);

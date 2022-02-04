@@ -22,12 +22,14 @@ public class GolfASP : MonoBehaviour
     {
         if (!SolverDone && solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
         {
-            
+
             //FindObjectOfType<Map.Map>().DisplayMap(solver.answerSet, mapKey);
             //FindObjectOfType<Map.Map>().AdjustCamera();
-            SolverDone = true;
 
             FindObjectOfType<GolfMoveFinder>().GenerateMoves(solver.answerSet, min_moves, max_moves, min_jumps, max_jumps);
+            SolverDone = true;
+
+            
         }
     }
 
