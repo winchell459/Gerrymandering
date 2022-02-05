@@ -3242,7 +3242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!156049354 &1797159449
 Grid:
   m_ObjectHideFlags: 0
@@ -3405,7 +3405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e103a3c61f2544644aa8c759723b3a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSpacing: 1.1
+  tileSpacing: 1
 --- !u!4 &1903979656
 Transform:
   m_ObjectHideFlags: 0

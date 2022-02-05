@@ -33,8 +33,14 @@ public class ASPLevelHandler : MonoBehaviour
             FindObjectOfType<Map.Map>().DisplayMap(golfASP.answerSet, mapKey);
             FindObjectOfType<Map.Map>().AdjustCamera();
 
+            setTiles();
             waitingForASP = false;
         }
+    }
+
+    void setTiles()
+    {
+
     }
 
     public Vector2 GetTilePos(Vector2Int tileIndex){

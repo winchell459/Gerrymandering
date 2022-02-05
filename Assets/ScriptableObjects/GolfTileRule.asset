@@ -51,59 +51,59 @@ MonoBehaviour:
     tileSprite: {fileID: 9056324117802818445, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
   - emptyPlacement: 0100010000010101
     tileSprite: {fileID: 6171553304417509720, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010001010001
     tileSprite: {fileID: -8853898694394319854, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010101010101
     tileSprite: {fileID: 5558014738751417336, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000100010101
     tileSprite: {fileID: -4035446484678817037, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000000000010101
     tileSprite: {fileID: -8062970871904486433, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010001010101
     tileSprite: {fileID: -575392218854010034, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000100010001
     tileSprite: {fileID: 3863381263347617627, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010001010001
     tileSprite: {fileID: 854702815716653130, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0101010000000001
     tileSprite: {fileID: -6113829897525254866, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0101010000010000
     tileSprite: {fileID: -4655264233636457337, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000000000000001
     tileSprite: {fileID: -3320517412421848883, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000000000010000
     tileSprite: {fileID: -8304231842399240351, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010000010001
     tileSprite: {fileID: 6694772890416188339, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000000010001
     tileSprite: {fileID: -460725149935867841, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010100010000
     tileSprite: {fileID: 5459137962460836957, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010001000001
     tileSprite: {fileID: 2736538858543228939, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010000010101
     tileSprite: {fileID: 2937366730214704532, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000000010101
     tileSprite: {fileID: 5239743856615593659, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010000000000
     tileSprite: {fileID: -3495475144649314573, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000000000000
     tileSprite: {fileID: -2483514913463300334, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010000000001
     tileSprite: {fileID: 2387441406451569313, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010000010000
     tileSprite: {fileID: 8064914076578130092, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010000000000
     tileSprite: {fileID: 3066520375629816324, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000000000010001
     tileSprite: {fileID: -4947400459375432228, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010000000001
     tileSprite: {fileID: 3392618541012564721, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000000010000
     tileSprite: {fileID: 6046449906382271213, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0000010000010000
     tileSprite: {fileID: 2660401745923699716, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100000000000001
     tileSprite: {fileID: 828535282827919116, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}
-  - emptyPlacement: 0101010100010001
+  - emptyPlacement: 0100010000010001
     tileSprite: {fileID: -5959293690810334418, guid: b967c8e3c1931514baf9376fdc43dfb4, type: 3}

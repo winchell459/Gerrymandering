@@ -36,9 +36,25 @@ namespace Map
                 GameObject pixel = Instantiate(tileDict[pixelType], transform);
                 pixel.GetComponent<GolfTile>().x = x;
                 pixel.GetComponent<GolfTile>().y = y;
+                pixel.GetComponent<GolfTile>().type = (GolfASP.tile_types)System.Enum.Parse(typeof(GolfASP.tile_types), pixelType);
                 pixel.transform.position = new Vector2(x * tileSpacing, y * tileSpacing);
-                
+
+                map[x, y] = pixel.GetComponent<GolfTile>();
             }
+
+            GolfTileRules tileRules = FindObjectOfType<GolfASP>().golfTileRules;
+
+            for(int h = 0; h < height; h += 1)
+            {
+                for (int w = 0; w < width; w += 1)
+                {
+                    if(map[w, h] && map[w,h].type == GolfASP.tile_types.air)
+                    {
+                        map[w, h].sprite.sprite =  tileRules.Tiles[0].tileSprite;
+                    }
+                }
+            }
+            
         }
 
         override public void AdjustCamera()
