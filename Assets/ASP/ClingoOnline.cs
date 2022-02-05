@@ -52,7 +52,7 @@ namespace Clingo
             }
             byte[] aspData = System.Text.Encoding.ASCII.GetBytes(aspCode);//File.ReadAllBytes(aspFilePath);
             //byte[] optionsData = File.ReadAllBytes(optionsPath);
-            byte[] optionsData = System.Text.Encoding.ASCII.GetBytes($" --outf=2 --sign-def=rnd  " + AdditionalArguments);
+            byte[] optionsData = System.Text.Encoding.ASCII.GetBytes($" --outf=2 --sign-def=rnd --seed={seed} " + AdditionalArguments);
 
             // Create upload form
             WWWForm form = new WWWForm();
