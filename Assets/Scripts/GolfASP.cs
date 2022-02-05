@@ -10,7 +10,7 @@ public class GolfASP : MonoBehaviour
 
 
     public bool SolverDone = false;
-
+    public GolfTileRules golfTileRules;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +35,7 @@ public class GolfASP : MonoBehaviour
 
     public void StartJob(ASPMemory<MoveEvents> memory)
     {
-        string aspCode = GetASPCode() + memory.Events.GetMoves();
+        string aspCode = GetASPCode() + memory.Events.GetMoves() + golfTileRules.getTileRules();
         string filename = Clingo.ClingoUtil.CreateFile(aspCode);
         solver.Solve(filename, $"-c max_width={width} -c max_height={height} -c max_moves={max_moves} -c min_moves={min_moves} -c max_jump={max_jumps} -c min_jump={min_jumps} --parallel-mode {threads}");
     }
