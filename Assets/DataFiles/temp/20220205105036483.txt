@@ -1,0 +1,2155 @@
+
+
+        width(1..max_width).
+        height(1..max_height).
+
+        tile_types(grass; air; obstacle;  start; hole).
+
+        1{tile(XX,YY,Type): tile_types(Type)}1 :- width(XX), height(YY).
+
+        :- {tile(_,_,hole)} != 1.
+        :- {tile(_,_,start)} != 1.
+    
+        
+        move(0, XX,YY) :- tile(XX,YY,start).
+        :- tile(XX,YY,hole), not move(_,XX,YY).
+        :- tile(XX,YY,hole), move(Min, XX,YY), Min < min_moves.
+        moves(1..max_moves).
+
+        move_tiles(hole;start;grass).
+        max_jumps(min_jump..max_jump).
+        mid_jumps(1..max_jump-1).
+        
+
+        move(T+1, X1,Y1) :- move(X1,Y1,X2,Y2), move(T,X2,Y2), moves(T+1).
+
+        %%move between two move_tiles with a Jump
+        move(XX,YY,XX+Jump,YY) :- tile(XX,YY,Tile), move_tiles(Tile), move(T,XX+Jump,YY), moves(T+1), max_jumps(Jump).
+        move(XX,YY,XX-Jump,YY) :- tile(XX,YY,Tile), move_tiles(Tile), move(T,XX-Jump,YY), moves(T+1), max_jumps(Jump).
+        move(XX,YY,XX,YY+Jump) :- tile(XX,YY,Tile), move_tiles(Tile), move(T,XX,YY+Jump), moves(T+1), max_jumps(Jump).
+        move(XX,YY,XX,YY-Jump) :- tile(XX,YY,Tile), move_tiles(Tile), move(T,XX,YY-Jump), moves(T+1), max_jumps(Jump).
+
+        %%cannot jump over a obstacle block
+        :- move(X1,Y1,X2,Y2), tile(X1+Mid_Point, Y1, obstacle), mid_jumps(Mid_Point), X2 - X1 - Mid_Point > 0, X2 > X1.
+        :- move(X1,Y1,X2,Y2), tile(X1-Mid_Point, Y1, obstacle), mid_jumps(Mid_Point), X1 - X2 - Mid_Point > 0, X2 < X1.
+        :- move(X1,Y1,X2,Y2), tile(X1, Y1+Mid_Point, obstacle), mid_jumps(Mid_Point), Y2 - Y1 - Mid_Point > 0, Y2 > Y1.
+        :- move(X1,Y1,X2,Y2), tile(X1, Y1-Mid_Point, obstacle), mid_jumps(Mid_Point), Y1 - Y2 - Mid_Point > 0, Y2 < Y1.
+        
+    
+            ground(XX,YY) :- tile(XX,YY,grass).
+            ground(XX,YY) :- tile(XX,YY,hole).
+            ground(XX,YY) :- tile(XX,YY,obstacle).
+            ground(XX,YY) :- tile(XX,YY,start).
+
+            :- Count = {tile(XX,YY, air): tile(XX -1, YY, air); width(XX), height(YY)}, Count < 1.
+        :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                         ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                         ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                         ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                         ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                         ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                        not ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                         ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                         ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            :- tile(XX,YY,air), 
+                         ground(XX-1,YY+1), 
+                        not ground(XX,YY+1), 
+                        not ground(XX+1,YY+1), 
+                        not ground(XX-1,YY), 
+                        not ground(XX+1,YY), 
+                        not ground(XX-1,YY-1), 
+                        not ground(XX,YY-1), 
+                        not ground(XX+1,YY-1)
+                        .
+            

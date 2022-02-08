@@ -195,7 +195,10 @@ public class GolfMoveFinder : MonoBehaviour
 
     public bool ValidMove(Vector2Int start, Vector2Int end)
     {
-        return validMove(start, end);
+        if (validMove(end))
+            return validMove(start, end);
+        else
+            return false;
     }
 
     private bool validMove(Vector2Int start, Vector2Int end)
@@ -262,6 +265,6 @@ public class GolfBoardTile
             movesStr += "(" + tile.x + ", " + tile.y + ") ";
         }
 
-        Debug.Log($"({x}, {y}) " + movesStr);
+        //Debug.Log($"({x}, {y}) " + movesStr);
     }
 }

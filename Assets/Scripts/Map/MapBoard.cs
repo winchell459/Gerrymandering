@@ -50,7 +50,20 @@ namespace Map
                 {
                     if(map[w, h] && map[w,h].type == GolfASP.tile_types.air)
                     {
-                        map[w, h].sprite.sprite =  tileRules.Tiles[0].tileSprite;
+                        bool[] neighbors = new bool[8];
+                        
+                        neighbors[0] = w > 0 && h < height - 1 && map[w - 1, h + 1].type == GolfASP.tile_types.air ? false : true;
+                        neighbors[1] = /*w > 0 && */ h < height - 1 && map[w, h + 1].type == GolfASP.tile_types.air ? false : true;
+                        neighbors[2] = w < width - 1 && h < height - 1 && map[w + 1, h + 1].type == GolfASP.tile_types.air ? false : true;
+
+                        neighbors[3] = w > 0 /*&& h < height - 1 */ && map[w - 1, h].type == GolfASP.tile_types.air ? false : true;
+                        neighbors[4] = w < width - 1 /*&& h < height - 1 */ && map[w + 1, h].type == GolfASP.tile_types.air ? false : true;
+
+                        neighbors[5] = w > 0 && h > 0 && map[w - 1, h - 1].type == GolfASP.tile_types.air ? false : true;
+                        neighbors[6] = /*w > 0 &&*/ h >0 && map[w, h - 1].type == GolfASP.tile_types.air ? false : true;
+                        neighbors[7] = w < width - 1 && h>0 && map[w + 1, h - 1].type == GolfASP.tile_types.air ? false : true;
+
+                        map[w, h].sprite.sprite =  tileRules.GetSprite(neighbors);
                     }
                 }
             }
