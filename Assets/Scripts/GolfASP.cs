@@ -71,6 +71,13 @@ public class GolfASP : MonoBehaviour
         :- {{tile(_,_,{tile_types.start})}} != 1.
 
         :- tile(_,YY,{tile_types.hole}), YY == max_height.
+
+        %% ------- island world code ------- %%
+        island_world(true).
+        :- island_world(true), tile(_,max_height, Type), Type != {tile_types.air}.
+        :- island_world(true), tile(_,1, Type), Type != {tile_types.air}.
+        :- island_world(true), tile(max_width,_, Type), Type != {tile_types.air}.
+        :- island_world(true), tile(1,_, Type), Type != {tile_types.air}.
     ";
 
     string play_rules = $@"
@@ -79,10 +86,14 @@ public class GolfASP : MonoBehaviour
         
         %:- Count = {{tile(SX,SY,{tile_types.start}): final_move(SX+I,SY+J), I = (-1;0;1), J = (-1;0;1), I + J != 0, I + J != 2, I + J != -2 }}, Count == 0.
 
-        :- Count = {{final_move(_,_)}}, Count != 1.
+        :- Count = {{final_move(_,_)}}, Count <= 1.
 
+        
         :- move(X1,Y1, X2,Y2), X1 == X2, Index = Y2 - Y1, Index > 0, tile(X1, Y1 + (1..Index-1), {tile_types.start}).
         :- move(X1,Y1, X2,Y2), Y1 == Y2, Index = X2 - X1, Index > 0, tile(X1 + (1..Index-1), Y1, {tile_types.start}).
+
+        :- move(X1,Y1, X2,Y2), X1 == X2, Index = Y2 - Y1, Index > 0, tile(X1, Y1 + (1..Index-1), _), move(_,X1, Y1 + (1..Index-1)).
+        :- move(X1,Y1, X2,Y2), Y1 == Y2, Index = X2 - X1, Index > 0, tile(X1 + (1..Index-1), Y1, _), move(_,X1 + (1..Index-1), Y1).
     ";
 
     string move_rules = $@"
@@ -111,5 +122,11 @@ public class GolfASP : MonoBehaviour
         :- move(X1,Y1,X2,Y2), tile(X1, Y1+Mid_Point, {tile_types.obstacle}), mid_jumps(Mid_Point), Y2 - Y1 - Mid_Point > 0, Y2 > Y1.
         :- move(X1,Y1,X2,Y2), tile(X1, Y1-Mid_Point, {tile_types.obstacle}), mid_jumps(Mid_Point), Y1 - Y2 - Mid_Point > 0, Y2 < Y1.
         
+
+        %%cannot jump over a hole block
+        :- move(X1,Y1,X2,Y2), tile(X1+Mid_Point, Y1, {tile_types.hole}), mid_jumps(Mid_Point), X2 - X1 - Mid_Point > 0, X2 > X1.
+        :- move(X1,Y1,X2,Y2), tile(X1-Mid_Point, Y1, {tile_types.hole}), mid_jumps(Mid_Point), X1 - X2 - Mid_Point > 0, X2 < X1.
+        :- move(X1,Y1,X2,Y2), tile(X1, Y1+Mid_Point, {tile_types.hole}), mid_jumps(Mid_Point), Y2 - Y1 - Mid_Point > 0, Y2 > Y1.
+        :- move(X1,Y1,X2,Y2), tile(X1, Y1-Mid_Point, {tile_types.hole}), mid_jumps(Mid_Point), Y1 - Y2 - Mid_Point > 0, Y2 < Y1.
     ";
 }

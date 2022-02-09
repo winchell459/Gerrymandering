@@ -121,7 +121,7 @@ public class GameHandler : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("Diagonal moves not implemented");
+                //Debug.LogWarning("Diagonal moves not implemented");
             }
 
             if (checkMoves(distance))

@@ -51,17 +51,48 @@ namespace Map
                     if(map[w, h] && map[w,h].type == GolfASP.tile_types.air)
                     {
                         bool[] neighbors = new bool[8];
+
+                        //neighbors[0]
+                        if(h == height - 1 && w == 0) neighbors[0] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+                        else if(h == height - 1) neighbors[0] = map[w - 1, h].type == GolfASP.tile_types.air ? false : true;
+                        else if(w == 0) neighbors[0] = map[w, h + 1].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[0] = w > 0 && h < height - 1 && map[w - 1, h + 1].type == GolfASP.tile_types.air ? false : true;
+
+                        //neighbors[1]
+                        if (h < height - 1) neighbors[1] = map[w, h + 1].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[1] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+
+                        //neighbors[2]
+                        if (w == width - 1 && h == height - 1) neighbors[2] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+                        else if(w == width - 1) neighbors[2] = map[w, h + 1].type == GolfASP.tile_types.air ? false : true;
+                        else if (h == height - 1) neighbors[2] = map[w + 1, h].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[2] = w < width - 1 && h < height - 1 && map[w + 1, h + 1].type == GolfASP.tile_types.air ? false : true;
                         
-                        neighbors[0] = w > 0 && h < height - 1 && map[w - 1, h + 1].type == GolfASP.tile_types.air ? false : true;
-                        neighbors[1] = /*w > 0 && */ h < height - 1 && map[w, h + 1].type == GolfASP.tile_types.air ? false : true;
-                        neighbors[2] = w < width - 1 && h < height - 1 && map[w + 1, h + 1].type == GolfASP.tile_types.air ? false : true;
 
-                        neighbors[3] = w > 0 /*&& h < height - 1 */ && map[w - 1, h].type == GolfASP.tile_types.air ? false : true;
-                        neighbors[4] = w < width - 1 /*&& h < height - 1 */ && map[w + 1, h].type == GolfASP.tile_types.air ? false : true;
+                        //neighbors[3]
+                        if (w > 0) neighbors[3] =  map[w - 1, h].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[3] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+                        //neighbors[4]
+                        if (w < width - 1) neighbors[4] = map[w + 1, h].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[4] = map[w, h].type == GolfASP.tile_types.air ? false : true;
 
-                        neighbors[5] = w > 0 && h > 0 && map[w - 1, h - 1].type == GolfASP.tile_types.air ? false : true;
-                        neighbors[6] = /*w > 0 &&*/ h >0 && map[w, h - 1].type == GolfASP.tile_types.air ? false : true;
-                        neighbors[7] = w < width - 1 && h>0 && map[w + 1, h - 1].type == GolfASP.tile_types.air ? false : true;
+
+                        //neighbors[5]
+                        if(w == 0 && h == 0) neighbors[5] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+                        else if(w == 0) neighbors[5] = map[w, h - 1].type == GolfASP.tile_types.air ? false : true;
+                        else if(h == 0) neighbors[5] = map[w - 1, h].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[5] = w > 0 && h > 0 && map[w - 1, h - 1].type == GolfASP.tile_types.air ? false : true;
+
+                        //neighbors[6]
+                        if (h > 0) neighbors[6] = map[w, h - 1].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[6] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+
+                        //neighbors[7]
+                        if (w == width - 1 && h == 0) neighbors[7] = map[w, h].type == GolfASP.tile_types.air ? false : true;
+                        else if(w == width - 1) neighbors[7] = map[w, h - 1].type == GolfASP.tile_types.air ? false : true;
+                        else if(h == 0) neighbors[7] = map[w + 1, h].type == GolfASP.tile_types.air ? false : true;
+                        else neighbors[7] = w < width - 1 && h > 0 && map[w + 1, h - 1].type == GolfASP.tile_types.air ? false : true;
+
 
                         map[w, h].sprite.sprite =  tileRules.GetSprite(neighbors);
                     }

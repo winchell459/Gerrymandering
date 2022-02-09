@@ -53,7 +53,8 @@ public class GolfTileRules : ScriptableObject
                         {getNot(missingTile[4])} ground(XX+1,YY), 
                         {getNot(missingTile[5])} ground(XX-1,YY-1), 
                         {getNot(missingTile[6])} ground(XX,YY-1), 
-                        {getNot(missingTile[7])} ground(XX+1,YY-1)
+                        {getNot(missingTile[7])} ground(XX+1,YY-1),
+                        XX > 1, YY > 1, XX < max_width, YY < max_height
                         .
             ";
         }
