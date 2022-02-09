@@ -45,6 +45,7 @@ public class GolfASP : MonoBehaviour
         string code = "";
         code += field_rules;
         code += move_rules;
+        code += play_rules;
         return code;
     }
 
@@ -68,6 +69,20 @@ public class GolfASP : MonoBehaviour
 
         :- {{tile(_,_,{tile_types.hole})}} != 1.
         :- {{tile(_,_,{tile_types.start})}} != 1.
+
+        :- tile(_,YY,{tile_types.hole}), YY == max_height.
+    ";
+
+    string play_rules = $@"
+        
+        final_move(XX,YY) :- tile(FX, FY, {tile_types.hole}), move(FX,FY,XX,YY ).
+        
+        %:- Count = {{tile(SX,SY,{tile_types.start}): final_move(SX+I,SY+J), I = (-1;0;1), J = (-1;0;1), I + J != 0, I + J != 2, I + J != -2 }}, Count == 0.
+
+        :- Count = {{final_move(_,_)}}, Count != 1.
+
+        :- move(X1,Y1, X2,Y2), X1 == X2, Index = Y2 - Y1, Index > 0, tile(X1, Y1 + (1..Index-1), {tile_types.start}).
+        :- move(X1,Y1, X2,Y2), Y1 == Y2, Index = X2 - X1, Index > 0, tile(X1 + (1..Index-1), Y1, {tile_types.start}).
     ";
 
     string move_rules = $@"

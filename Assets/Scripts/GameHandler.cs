@@ -79,7 +79,7 @@ public class GameHandler : MonoBehaviour
     public void GolfTileClicked(GolfTile tile)
     {
         if (gameOver) return;
-        if (player.Stopped && moveFinder.ValidMove(currentPos, tile.pos))
+        if (player.Stopped && ValidMove(tile.pos))
         {
             int distance = 0;
             if(currentPos.x == tile.pos.x)
@@ -103,6 +103,41 @@ public class GameHandler : MonoBehaviour
         }
 
         
+    }
+
+    public bool ValidMove(Vector2Int targetTilePos)
+    {
+        if (gameOver) return false;
+        if (player.Stopped && moveFinder.ValidMove(currentPos, targetTilePos))
+        {
+            int distance = 0;
+            if (currentPos.x == targetTilePos.x)
+            {
+                distance = Mathf.Abs(currentPos.y - targetTilePos.y);
+            }
+            else if (currentPos.y == targetTilePos.y)
+            {
+                distance = Mathf.Abs(currentPos.x - targetTilePos.x);
+            }
+            else
+            {
+                Debug.LogWarning("Diagonal moves not implemented");
+            }
+
+            if (checkMoves(distance))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private bool checkMoves(int distance)
