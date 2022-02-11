@@ -2,34 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class TileNeighbors
-{
-    public enum State
-    {
-        none,
-        filled,
-        empty
-    }
-    public State[] neighbors = new State[8];
-}
+
 
 [CreateAssetMenu(fileName = "GolfTileRule", menuName = "ScriptableObjects/GolfTileRule")]
-public class GolfTileRules : ScriptableObject
+public class GolfTileRules : ASPTileRules
 {
-    [System.Serializable]
-    public struct TileRule
-    {
-        public string name { get { return tileSprite.name; } }
-        public bool[] emptyPlacement;
-        public bool[] mustHave;
-        public Sprite tileSprite;
-    }
-
-    public TileRule[] Tiles;
+    //private void UpdateTileNeighborsState()
+    //{
+        
+    //    //for (int j = 0; j < Tiles.Length; j += 1)
+    //    foreach(TileRule tileRule in Tiles)
+    //    {
+    //        Debug.Log("UpdateTileNeighborsState");
+    //        //TileRule tileRule = Tiles[j];
+    //        //tileRule.neighbors = new TileNeighbors.State[8];
+    //        for (int i = 0; i < 8; i += 1)
+    //        {
+    //            if (!tileRule.mustHave[i])
+    //            {
+    //                tileRule.neighbors[i] = TileNeighbors.State.none;
+    //            }
+    //            else if (tileRule.emptyPlacement[i])
+    //            {
+    //                tileRule.neighbors[i] = TileNeighbors.State.filled;
+    //            }
+    //            else
+    //            {
+    //                tileRule.neighbors[i] = TileNeighbors.State.empty;
+    //            }
+    //        }
+    //    }
+    //}
     
-    public string getTileRules()
+
+    public override string getTileRules()
     {
+        //UpdateTileNeighborsState();
         string aspCode = $@"
             ground(XX,YY) :- tile(XX,YY,{GolfASP.tile_types.grass}).
             ground(XX,YY) :- tile(XX,YY,{GolfASP.tile_types.hole}).
@@ -63,47 +71,7 @@ public class GolfTileRules : ScriptableObject
         return aspCode;
     }
 
-    List<bool[]> getMissingRules(TileRule[] tileRules)
-    {
-        List<bool[]> missingRules = new List<bool[]>();
-        for (int i = 0; i < 256; i += 1)
-        {
-            bool[] permutation = getPermutation(i);
-            //string debug = "";
-            //for(int j = 0; j < 8; j += 1)
-            //{
-            //    debug += permutation[j] + ", ";
-            //}
-            //Debug.Log(debug);
-            bool missing = true;
-            foreach(TileRule tileRule in tileRules)
-            {
-                bool found = true;
-                for(int j = 0; j < 8; j += 1)
-                {
-                    if (tileRule.mustHave[j]/* && !tileRule.emptyPlacement[j]*/ && permutation[j] != tileRule.emptyPlacement[j]) found = false;
-                }
-                if (found) missing = false;
-            }
-            if (missing) missingRules.Add(permutation);
-        }
-
-        return missingRules;
-    }
-
-    bool[] getPermutation(int num)
-    {
-        bool[] permutation = new bool[8];
-        int index = 7;
-        while(index >= 0)
-        {
-            int placeValue = num / (int)Mathf.Pow(2, index);
-            if (placeValue == 1) permutation[index] = true;
-            num = num % (int)Mathf.Pow(2, index);
-            index -= 1;
-        }
-        return permutation;
-    }
+    
 
     string getNot(bool isEmpty)
     {
@@ -123,7 +91,7 @@ public class GolfTileRules : ScriptableObject
         return blockPattern;
     }
 
-    public Sprite GetSprite(bool[] neighbors)
+    public override Sprite GetSprite(bool[] neighbors)
     {
         Sprite sprite = null;
         foreach(TileRule tileRule in Tiles)
@@ -139,9 +107,12 @@ public class GolfTileRules : ScriptableObject
         bool match = true;
         for (int i = 0; i < 8; i += 1)
         {
-            if (tile.mustHave[i] && tile.emptyPlacement[i] != neighbors[i]) match = false;
+            //if (tile.mustHave[i] && tile.emptyPlacement[i] != neighbors[i]) match = false;
+
+            if (tile.neighbors[i] != TileNeighbors.State.none && neighbors[i] != (tile.neighbors[i] == TileNeighbors.State.filled)) match = false;
             
         }
         return match;
     }
+
 }
