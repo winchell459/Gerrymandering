@@ -7,7 +7,7 @@ public abstract class ASPTileRules : ScriptableObject
     [System.Serializable]
     public struct TileRule
     {
-        public string name { get { return tileSprite.name; } }
+        public string name;//{ get { return tileSprite.name; } }
         public TileNeighbors.State[] neighbors;
         //public bool[] emptyPlacement;
         //public bool[] mustHave;
@@ -76,3 +76,18 @@ public class TileNeighbors
     }
     public State[] neighbors = new State[8];
 }
+
+//[UnityEditor.CustomEditor(typeof(ASPTileRules))]
+//public class ASPTileRulesEditor : UnityEditor.Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        DrawDefaultInspector();
+//        ASPTileRules tileRules = (ASPTileRules)target;
+
+//        foreach(ASPTileRules.TileRule tile in tileRules.Tiles)
+//        {
+//            if (tile.tileSprite) tile.name = tile.tileSprite.name;
+//        }
+//    }
+//}

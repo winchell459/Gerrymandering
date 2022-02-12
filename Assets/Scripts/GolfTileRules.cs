@@ -7,32 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GolfTileRule", menuName = "ScriptableObjects/GolfTileRule")]
 public class GolfTileRules : ASPTileRules
 {
-    //private void UpdateTileNeighborsState()
-    //{
-        
-    //    //for (int j = 0; j < Tiles.Length; j += 1)
-    //    foreach(TileRule tileRule in Tiles)
-    //    {
-    //        Debug.Log("UpdateTileNeighborsState");
-    //        //TileRule tileRule = Tiles[j];
-    //        //tileRule.neighbors = new TileNeighbors.State[8];
-    //        for (int i = 0; i < 8; i += 1)
-    //        {
-    //            if (!tileRule.mustHave[i])
-    //            {
-    //                tileRule.neighbors[i] = TileNeighbors.State.none;
-    //            }
-    //            else if (tileRule.emptyPlacement[i])
-    //            {
-    //                tileRule.neighbors[i] = TileNeighbors.State.filled;
-    //            }
-    //            else
-    //            {
-    //                tileRule.neighbors[i] = TileNeighbors.State.empty;
-    //            }
-    //        }
-    //    }
-    //}
+    
     
 
     public override string getTileRules()
@@ -61,8 +36,7 @@ public class GolfTileRules : ASPTileRules
                         {getNot(missingTile[4])} ground(XX+1,YY), 
                         {getNot(missingTile[5])} ground(XX-1,YY-1), 
                         {getNot(missingTile[6])} ground(XX,YY-1), 
-                        {getNot(missingTile[7])} ground(XX+1,YY-1),
-                        XX > 1, YY > 1, XX < max_width, YY < max_height
+                        {getNot(missingTile[7])} ground(XX+1,YY-1)
                         .
             ";
         }

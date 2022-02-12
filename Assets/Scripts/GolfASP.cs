@@ -73,7 +73,7 @@ public class GolfASP : MonoBehaviour
         :- tile(_,YY,{tile_types.hole}), YY == max_height.
 
         %% ------- island world code ------- %%
-        island_world(true).
+        island_world(false).
         :- island_world(true), tile(_,max_height, Type), Type != {tile_types.air}.
         :- island_world(true), tile(_,1, Type), Type != {tile_types.air}.
         :- island_world(true), tile(max_width,_, Type), Type != {tile_types.air}.
